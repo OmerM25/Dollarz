@@ -1,4 +1,4 @@
-const { User } = require("./user");
+const { User } = require("../user/user");
 
 class Parent extends User {
     constructor(id, name, password, children, tasks) {
