@@ -4,11 +4,9 @@ var mongoose = require("mongoose");
 var app = express();
 var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/dollarz?retryWrites=true&w=majority";
 
-//app.get("/", (req, res) => res.send("Hello World!"));
-
 const routes = require("./routes/router").default;
 
-//Set all routes from routes folder
+// Set all routes from routes folder
 app.use("/", routes);
 
 // Launch the server on port 3000

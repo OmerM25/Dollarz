@@ -1,7 +1,6 @@
 const { json } = require("body-parser");
 var express = require("express");
 var router = express.Router();
-var movies = require("../data.js");
 var jwt = require("jsonwebtoken");
 
 import { NextFunction, Request, Response } from "express";
