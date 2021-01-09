@@ -1,10 +1,10 @@
-class Request {
-    constructor(id, senderId, receiverId, isApproved, amount) {
-        this.id = id;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.isApproved = isApproved;
-        this.amount = amount;
-    }
-}
-module.exports.Request = Request;
+var Schema = mongoose.Schema;
+var RequestSchema = new Schema({
+    id: {type: Schema.Types.ObjectId, required: true},
+    senderId: {type: Number, required: true},
+    receiverId: {type: Number, required: true},
+    isApproved: {type: Number, required: true},
+    amount: {type: Number, required: true}
+});
+
+module.exports = mongoose.model('Request', RequestSchema);

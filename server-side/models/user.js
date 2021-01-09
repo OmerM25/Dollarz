@@ -1,8 +1,8 @@
-class User {
-    constructor(id, name, password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-    }
-}
-module.exports.User = User;
+var Schema = mongoose.Schema;
+var UserSchema = new Schema({
+    id: {type: Schema.Types.ObjectId, required: true},
+    name: {type: String, required: true},
+    password: {type: String, required: true}
+});
+
+module.exports = mongoose.model('User', UserSchema);

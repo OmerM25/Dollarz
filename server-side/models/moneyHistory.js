@@ -1,8 +1,8 @@
-class MoneyHistory {
-    constructor(child, amount, date) {
-        this.child = child;
-        this.amount = amount;
-        this.date = date;
-    }
-}
-module.exports.MoneyHistory = MoneyHistory;
+var Schema = mongoose.Schema;
+var MoneyHistorySchema = new mongoose.Schema({
+    child: {type: Schema.Types.ObjectId, ref: 'Child', required: true},
+    amount: {type: Number, required: true},
+    date: {type: Date, required: true}
+});
+
+module.exports = mongoose.model('MoneyHistory', MoneyHistorySchema);
