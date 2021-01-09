@@ -1,4 +1,4 @@
-const { User } = require("./user");
+const { User } = require("../user/user");
 
 class Child extends User {
     constructor(id, name, password, parent, money, goals, requests, gameScore) {
