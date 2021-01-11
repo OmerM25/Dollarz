@@ -5,7 +5,7 @@ var ParentSchema = new Schema({
     name: {type: String, required: true},
     password: {type: String, required: true},
     children: [{type: Schema.Types.ObjectId, ref: 'Child'}],
-    tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}]
+    chores: [{type: Schema.Types.ObjectId, ref: 'Chore'}]
 });
 
 module.exports = mongoose.model('Parent', ParentSchema);

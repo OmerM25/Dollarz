@@ -1,8 +1,8 @@
 var Schema = mongoose.Schema;
-var TaskSchema = new Schema({
+var ChoreSchema = new Schema({
     description: {type: String, required: true},
     amount: {type: Number, min: 0, required: true},
     isFinished: {type: Boolean, required: true}
 });
 
-module.exports = mongoose.model('Task', TaskSchema);
+module.exports = mongoose.model('Chore', ChoreSchema);
