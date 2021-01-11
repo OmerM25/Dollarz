@@ -82,7 +82,7 @@ const bottomTabNavigator = createBottomTabNavigator(
       screen: choresScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="tasks" size={25} color={tintColor} />
+          <Icon name="list-ol" size={25} color={tintColor} />
         ),
         tabBarOptions: {
           activeTintColor: '#6C63FC',
