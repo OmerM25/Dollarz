@@ -1,9 +1,10 @@
-class Goal {
-    constructor(id, description, amount, isAchieved) {
-        this.id = id;
-        this.description = description;
-        this.amount = amount;
-        this.isAchieved = isAchieved;
-    }
-}
-module.exports.Goal = Goal;
+var mongoose = require("mongoose");
+
+var Schema = mongoose.Schema;
+var GoalSchema = new Schema({
+    description: {type: String, required: true},
+    amount: {type: Number, required: true},
+    isAchieved: {type: Boolean, required: true}
+});
+
+module.exports = mongoose.model('Goal', GoalSchema);

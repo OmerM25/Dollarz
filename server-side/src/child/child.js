@@ -1,13 +1,14 @@
-const { User } = require("../user/user");
+var mongoose = require("mongoose");
 
-class Child extends User {
-    constructor(id, name, password, parent, money, goals, requests, gameScore) {
-        super(id, name, password);
-        this.parent = parent;
-        this.money = money;
-        this.goals = goals;
-        this.requests = requests;
-        this.gameScore = gameScore;
-    }
-}
-module.exports.Child = Child;
+var Schema = mongoose.Schema;
+var ChildSchema = new Schema({
+    name: {type: String, required: true},
+    password: {type: String, required: true},
+    parent: {type: Schema.Types.ObjectId, ref: 'Parent', required: true},
+    money: {type: Number, default: 0},
+    goals: [{type: Schema.Types.ObjectId, ref: 'Goal'}],
+    requests: [{type: Schema.Types.ObjectId, ref: 'Request'}],
+    gameScore: [{type: Number, default: 0}]
+});
+
+module.exports = mongoose.model('Child', ChildSchema);
