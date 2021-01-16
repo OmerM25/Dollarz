@@ -3,8 +3,6 @@ var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
 
-// import { NextFunction, Request, Response } from "express";
-
 // Authenticate using jwt using middleware
 router.use((req, res, next) => {
   // Exclude login and registration page
@@ -29,28 +27,6 @@ router.use((req, res, next) => {
 
   // Continue to next middleware
   next();
-});
-
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  //res.render("index", { title: "Express" });
-  res.json({ msg: "homepage" });
-});
-
-router.post("/login", function (req, res, next) {
-  const user = {
-    name: "sapir",
-    email: "12@gmail.com",
-  };
-
-  // ---ADD HERE CHECK WHETHER THE USER EXIST IN THE DB---
-
-  // Register only existing users
-  jwt.sign({ user }, "dollarzJwt", (err, token) => {
-    res.json({
-      token,
-    });
-  });
 });
 
 // module.exports = router;
