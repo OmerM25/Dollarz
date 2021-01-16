@@ -3,7 +3,7 @@ var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
 
-import { NextFunction, Request, Response } from "express";
+// import { NextFunction, Request, Response } from "express";
 
 // Authenticate using jwt using middleware
 router.use((req, res, next) => {
@@ -53,5 +53,5 @@ router.post("/login", function (req, res, next) {
   });
 });
 
-//module.exports = router;
+// module.exports = router;
 export default router;
