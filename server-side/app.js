@@ -27,6 +27,7 @@ const server = app.listen(3000, () => {
 
   mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
   mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
+  mongoose.set("useCreateIndex", true);
 });
 
 module.exports = app;
