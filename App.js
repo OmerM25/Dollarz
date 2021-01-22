@@ -14,7 +14,7 @@ export default function App() {
         screenOptions={{
           headerShown: false
         }}
-        initialRouteName="Login">
+        initialRouteName="MainLayout">
         <Stack.Screen name="MainLayout" component={MainLayout} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -23,4 +23,13 @@ export default function App() {
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    //marginTop: 100,
+  },
+});
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, TextInput, StyleSheet, Text, Button, Image } from "react-native";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import Icon from "react-native-vector-icons/Ionicons";
 import FlashMessage from "react-native-flash-message";
+import AxiosInstance from "../utils/AxiosInstance";
 
 const Register = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -65,10 +65,18 @@ const Register = (props) => {
       }
     }
 
-    // Register User
+    // Register Parent and then navigate to home screen
+    registerParent();
+  };
 
-    // Navigate to home screen
-    //props.navigation.navigate("MainLayout");
+  const registerParent = async () => {
+    await AxiosInstance.post("/user/registerParent", {
+      id: idNumber,
+      name: firstName + " " + lastName,
+      password: password,
+    })
+      .then(() => props.navigation.navigate("MainLayout"))
+      .catch((err) => console.log("error in registration"));
   };
 
   const checkIDValidation = () => {
@@ -95,11 +103,11 @@ const Register = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={{ width: 300, height: 150 }} source={require("./../images/Component 16 Γאף 1.png")} />
+        <Image style={{ width: 300, height: 150 }} source={require("../assets/images/image-form.png")} />
       </View>
       <View style={styles.footer}>
-        <Text style={{ fontSize: 28, marginTop: 25 }}> איזה כיף שהחלטתם להירשם! </Text>
-        <Text style={{ fontSize: 15, color: "#4525F2", marginTop: 25, marginBottom: 20 }}>
+        <Text style={{ fontSize: 28, marginTop: 25, textAlign: "center" }}> איזה כיף שהחלטתם להירשם!! </Text>
+        <Text style={{ fontSize: 15, color: "#4525F2", marginTop: 25, marginBottom: 20, textAlign: "center" }}>
           שימו לב- מלאו את הפרטים של אחד ההורים, שניכם תוכלו להחבר יחד לאותו החשבון
         </Text>
         <View style={styles.form}>
@@ -151,10 +159,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F0F0",
   },
   header: {
-    flex: 0.65,
+    flex: 0.9,
     alignItems: "center",
-    marginTop: 30,
-    marginBottom: 26,
+    marginTop: 90,
+    marginBottom: 20,
     paddingHorizontal: 10,
   },
   footer: {
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1.0,
     width: 260,
     height: 35,
-    marginBottom: 22,
+    marginBottom: 30,
     fontSize: 17,
   },
 });
