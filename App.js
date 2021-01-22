@@ -4,11 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./pages/login";
 import MainLayout from "./pages/mainLayout";
 import Register from "./pages/register";
-import theme from "./style/themeProvider";
-import { setCustomText } from 'react-native-global-props';
 
 export default function App() {
-
   const Stack = createStackNavigator();
 
   return (

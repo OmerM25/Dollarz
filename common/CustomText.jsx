@@ -2,16 +2,16 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useFonts } from 'expo-font';
 
-export const CustomText = ({ style }) => {
+export const CustomText = ({ children, style }) => {
     const [loaded] = useFonts({
-        AlBayan: require('../assets/fonts/AlBayan.ttf'),
+        VarelaRound: require('../assets/fonts/VarelaRound-Regular.ttf'),
     });
 
     if (!loaded) {
-        return "hi";
+        return null;
     }
 
     return (
-        <Text style={{ fontFamily: 'AlBayan' }}></Text>
+        <Text style={{ ...style, fontFamily: 'VarelaRound' }}>{children}</Text>
     )
 }
