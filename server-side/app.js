@@ -1,13 +1,24 @@
 var express = require("express");
 var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 
 var app = express();
 var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/dollarz?retryWrites=true&w=majority";
 
 const routes = require("./routes/router").default;
+//const goals = require("./src/controllers/goalController").default;
+const user = require("./src/controllers/userController").default;
 
 // Set all routes from routes folder
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+app.use(bodyParser.json());
 app.use("/", routes);
+app.use("/user", user);
+//app.use("/goals", goals);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {
@@ -16,6 +27,7 @@ const server = app.listen(3000, () => {
 
   mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
   mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
+  mongoose.set("useCreateIndex", true);
 });
 
 module.exports = app;

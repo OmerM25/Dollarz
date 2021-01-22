@@ -1,3 +1,5 @@
+var mongoose = require("mongoose");
+
 var Schema = mongoose.Schema;
 var GoalSchema = new Schema({
     description: {type: String, required: true},
