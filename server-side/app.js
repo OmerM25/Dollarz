@@ -25,7 +25,6 @@ app.use("/", routes);
 app.use("/goals", goals);
 app.use("/chore", chores);
 app.use("/user", user);
-app.use("/goals", goals);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {
