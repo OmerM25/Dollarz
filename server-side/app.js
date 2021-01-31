@@ -9,15 +9,19 @@ var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/
 const routes = require("./routes/router").default;
 const goals = require("./src/controllers/goalController").default;
 const chores = require("./src/controllers/choreController").default;
+const user = require("./src/controllers/userController").default;
 
 // Set all routes from routes folder
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
 app.use(bodyParser.json());
 app.use("/", routes);
 app.use("/goals", goals);
 app.use("/chore", chores);
+app.use("/user", user);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {
@@ -26,6 +30,7 @@ const server = app.listen(3000, () => {
 
   mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
   mongoose.connection.on("error", console.error.bind(console, "MongoDB connection error:"));
+  mongoose.set("useCreateIndex", true);
 });
 
 module.exports = app;

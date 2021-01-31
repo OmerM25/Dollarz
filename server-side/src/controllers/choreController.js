@@ -6,7 +6,12 @@ var mongoose = require("mongoose");
 
 // Create
 router.post('/', function (req, res) {
-    const chore = new Chore({ description: req.body.description, amount: req.body.amount, isFinished: false });
+    const chore = new Chore({
+        description: req.body.description,
+        amount: req.body.amount,
+        isFinished: false
+    });
+    
     var parentId = mongoose.Types.ObjectId(req.body.parentId);
 
     chore.save().then((err, chore) => {
