@@ -1,3 +1,5 @@
+var mongoose = require("mongoose");
+
 var Schema = mongoose.Schema;
 var ChoreSchema = new Schema({
     description: {type: String, required: true},
