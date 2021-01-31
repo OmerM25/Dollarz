@@ -1,12 +1,8 @@
 var express = require("express");
 var mongoose = require("mongoose");
-<<<<<<< HEAD
-var bodyParser = require('body-parser');
 var Parent = require("./src/parent/parent")
-=======
 var bodyParser = require("body-parser");
 var cors = require("cors");
->>>>>>> 233a769ecfc94c479637ffe868e335932f7d08ae
 
 var app = express();
 var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/dollarz?retryWrites=true&w=majority";
