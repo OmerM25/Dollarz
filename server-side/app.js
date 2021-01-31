@@ -1,7 +1,12 @@
 var express = require("express");
 var mongoose = require("mongoose");
+<<<<<<< HEAD
 var bodyParser = require('body-parser');
 var Parent = require("./src/parent/parent")
+=======
+var bodyParser = require("body-parser");
+var cors = require("cors");
+>>>>>>> 233a769ecfc94c479637ffe868e335932f7d08ae
 
 var app = express();
 var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/dollarz?retryWrites=true&w=majority";
@@ -10,6 +15,8 @@ const routes = require("./routes/router").default;
 const goals = require("./src/controllers/goalController").default;
 const chores = require("./src/controllers/choreController").default;
 const user = require("./src/controllers/userController").default;
+
+app.use(cors());
 
 // Set all routes from routes folder
 app.use(
@@ -22,6 +29,7 @@ app.use("/", routes);
 app.use("/goals", goals);
 app.use("/chore", chores);
 app.use("/user", user);
+app.use("/goals", goals);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {

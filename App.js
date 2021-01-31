@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-//import { createAppContainer } from "react-navigation";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./pages/login";
@@ -14,9 +12,9 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false,
+          headerShown: false
         }}
-        initialRouteName="Login">
+        initialRouteName="MainLayout">
         <Stack.Screen name="MainLayout" component={MainLayout} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -31,5 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    //marginTop: 100,
   },
 });
+
