@@ -1,5 +1,5 @@
 var express = require("express");
-const Chore = require("../chore/chore");
+const Chore = require("./chore");
 var router = express.Router();
 var Parent = require("../parent/parent")
 var mongoose = require("mongoose");

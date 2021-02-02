@@ -3,31 +3,27 @@ var jwt = require("jsonwebtoken");
 var mongoose = require("mongoose");
 
 var router = express.Router();
-var User = require("../user/user");
+var User = require("./user");
 var Parent = require("../parent/parent");
 var Child = require("../child/child");
 
 router.post("/login", function (req, res, next) {
-  // const user = {
-  //   id: req.body.id,
-  //   name: req.body.name,
-  //   password: req.body.password,
-  // };
+  const userId = req.body.userId;
+  const password = req.body.password;
+  const currUser = User.findOne({ idNumber: userId }, (err, docs) => {
+    if (docs && docs.password === password) {
 
-  const user = {
-    // DONT FORGET ---- get _id From DB! ----
-    id: "315996660",
-    name: "sapir",
-    password: "123",
-  };
+      const user = {
+        id: currUser.idNumber,
+        name: currUser.name,
+      };
 
-  // ---ADD HERE CHECK WHETHER THE USER EXIST IN THE DB---
-
-  // Register only existing users
-  jwt.sign({ user }, "dollarzJwt", (err, token) => {
-    res.json({
-      token,
-    });
+      jwt.sign({ user }, "dollarzJwt", (err, token) => {
+        res.json({
+          token,
+        });
+      }).then(res.status(200).send());
+    } else return res.status(401).send("user does not exist");
   });
 });
 

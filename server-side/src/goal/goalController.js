@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var express = require("express");
 var router = express.Router();
-var Goal = require("../goal/goal")
+var Goal = require("./goal")
 var Child = require("../child/child")
 
 // Create a new goal.

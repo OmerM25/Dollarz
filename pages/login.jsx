@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { StyleSheet, View, Image, TextInput } from "react-native";
 import { Button } from "../common/Button";
 import { CustomText } from "../common/CustomText";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import AxiosInstance from "../utils/AxiosInstance";
+import { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
 const img = require("../images/LoginPage.png");
 
@@ -11,7 +12,16 @@ const Login = ({ navigation: { navigate } }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = () => {
-    navigate('MainLayout');
+    AxiosInstance.post('user/login', {
+      userId: id,
+      password: password
+    }).then(() => navigate('MainLayout'))
+      .catch((err) => showMessage({
+        message: "ארעה שגיאה בהתחברות",
+        description: "משתמש אינו קיים",
+        type: "error",
+        textAlign: "right",
+      }))
   }
   return (
     <View style={styles.view}>
@@ -37,6 +47,7 @@ const Login = ({ navigation: { navigate } }) => {
         value={password}
         onChangeText={setPassword}
         style={styles.input} />
+      <FlashMessage position="top" />
       <Button
         title="התחבר"
         color={'#3A23CD'}
@@ -45,7 +56,7 @@ const Login = ({ navigation: { navigate } }) => {
       <Button
         title="הורה? הירשם עכשו"
         color={'#3A23CD'}
-        onPress={()=>  navigate('Register')}>
+        onPress={() => navigate('Register')}>
       </Button>
     </View>
   );
