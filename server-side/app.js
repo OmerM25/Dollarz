@@ -9,6 +9,7 @@ var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/
 const routes = require("./routes/router").default;
 const goals = require("./src/controllers/goalController").default;
 const user = require("./src/controllers/userController").default;
+const child = require("./src/controllers/childController").default;
 
 app.use(cors());
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use("/", routes);
 app.use("/user", user);
 app.use("/goals", goals);
+app.use("/child", child);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {
