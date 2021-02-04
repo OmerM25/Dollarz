@@ -27,8 +27,8 @@ const bottomTabNavigator = createBottomTabNavigator(
         },
       },
     },
-    home: {
-      screen: Pages.Home,
+    homeChild: {
+      screen: Pages.HomeChild,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon name="home" size={25} color={tintColor} />,
         tabBarOptions: {
@@ -59,16 +59,14 @@ const bottomTabNavigator = createBottomTabNavigator(
     },
   },
   {
-    initialRouteName: "home",
+    initialRouteName: "homeChild",
   }
 );
 
 const MainLayout = () => {
   const AppContainer = createAppContainer(bottomTabNavigator);
 
-  return (
-      <AppContainer />
-  )
+  return <AppContainer />;
 };
 
 export default MainLayout;

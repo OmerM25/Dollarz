@@ -8,26 +8,29 @@ var Parent = require("../parent/parent");
 var Child = require("../child/child");
 
 router.post("/login", function (req, res, next) {
-  // const user = {
-  //   id: req.body.id,
-  //   name: req.body.name,
-  //   password: req.body.password,
-  // };
+  const userId = req.body.userId;
+  const password = req.body.password;
+  User.findOne({ idNumber: userId, password: password }, (err, currUser) => {
+    if (currUser) {
+      const user = {
+        _id: currUser._id,
+        id: currUser.idNumber,
+        name: currUser.name,
+      };
 
-  const user = {
-    // DONT FORGET ---- get _id From DB! ----
-    id: "315996660",
-    name: "sapir",
-    password: "123",
-  };
+      jwt.sign({ user }, "dollarz", (err, token) => {
+        if (err) {
+          console.log(err);
+          res.status(401).send("server error");
+        } else {
+          res.json({
+            token,
+          });
 
-  // ---ADD HERE CHECK WHETHER THE USER EXIST IN THE DB---
-
-  // Register only existing users
-  jwt.sign({ user }, "dollarzJwt", (err, token) => {
-    res.json({
-      token,
-    });
+          res.status(200).send();
+        }
+      });
+    } else return res.status(401).send("user does not exist");
   });
 });
 
@@ -49,25 +52,38 @@ router.post("/registerParent", function (req, res, next) {
       parent.save().then(res.status(200).send());
     });
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send("error");
   }
 });
 
 // Register new child to the DB
 router.post("/registerChild", function (req, res, next) {
-  const user = new User({
-    idNumber: req.body.id,
-    name: req.body.name,
-    password: req.body.password,
-  });
-
-  // Get parent token
-  const token = req.headers.authorization.split(" ")[1];
-
-  // Get parent _id
-  const parentId = jwt.decode(token).user._id;
-
   try {
+    // Get sender token
+    const token = req.headers.authorization.split(" ")[1];
+
+    // Get sender _id
+    const senderId = jwt.decode(token).user._id;
+
+    let parentId = "";
+
+    // only parents can register childrens
+    Parent.findOne({ userDetails: senderId }, (err, parent) => {
+      if (err || parent === undefined) {
+        return res.status(401).send("no auth");
+      } else {
+        parentId = parent._id;
+      }
+    }).catch((err) => {
+      return res.status(401).send("no auth");
+    });
+
+    const user = new User({
+      idNumber: req.body.id,
+      name: req.body.name,
+      password: req.body.password,
+    });
+
     user.save().then(() => {
       const child = new Child({
         userDetails: user._id,
@@ -77,10 +93,10 @@ router.post("/registerChild", function (req, res, next) {
         requests: [],
         gameScore: [],
       });
-      child.save().then(res.status(200).send());
+      child.save().then(res.status(200).send("child created successfully"));
     });
-  } catch (error) {
-    return res.status(500).send(error);
+  } catch (err) {
+    res.status(500).send("error creating new child");
   }
 });
 
