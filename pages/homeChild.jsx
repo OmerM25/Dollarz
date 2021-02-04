@@ -20,7 +20,7 @@ const HomeChild = (props) => {
       <Button
         title="אני רוצה להשתמש בכסף"
         color="#4525F2"
-        onPress={/** change state and switch to ASK MONEY component */}
+        //onPress={/** change state and switch to ASK MONEY component */}
       />
     </View>
   );
