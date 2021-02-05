@@ -1,26 +1,16 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Login from "./pages/login";
-import MainLayout from "./pages/mainLayout";
-import Register from "./pages/register";
-import AskMoney from "./pages/askmoney";
+import React from "react";
+import { View } from "react-native";
+import FlashMessage from "react-native-flash-message";
+import NavContainer from "./pages/components/NavContainer";
 
 export default function App() {
   const Stack = createStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Login">
-        <Stack.Screen name="MainLayout" component={MainLayout} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="AskMoney" component={AskMoney} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1 }}>
+      <NavContainer />
+      <FlashMessage position="fixed" floating={true} />
+    </View>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, Button } from "react-native";
 
-const HomeChild = (props) => {
+const HomeChild = ({ navigation: { navigate } }) => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ fontSize: 45 }}> היי דני! </Text>
@@ -20,7 +20,9 @@ const HomeChild = (props) => {
       <Button
         title="אני רוצה להשתמש בכסף"
         color="#4525F2"
-        //onPress={/** change state and switch to ASK MONEY component */}
+        onPress={() => {
+          navigate("Login");
+        }}
       />
     </View>
   );

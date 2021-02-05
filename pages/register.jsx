@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import AxiosInstance from "../utils/AxiosInstance";
 
-const Register = (props) => {
+const Register = ({ navigation: { navigate } }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [idNumber, setIdNumber] = useState("");
@@ -20,6 +20,7 @@ const Register = (props) => {
         type: "error",
         textAlign: "right",
       });
+      window.scrollTo(0, 0);
       return;
     } else {
       if (!nameRegex.test(firstName)) {
@@ -29,6 +30,7 @@ const Register = (props) => {
           type: "error",
           textAlign: "right",
         });
+        window.scrollTo(0, 0);
         return;
       }
 
@@ -39,6 +41,7 @@ const Register = (props) => {
           type: "error",
           textAlign: "right",
         });
+        window.scrollTo(0, 0);
         return;
       }
 
@@ -48,6 +51,7 @@ const Register = (props) => {
           type: "error",
           textAlign: "right",
         });
+        window.scrollTo(0, 0);
         return;
       }
 
@@ -60,6 +64,7 @@ const Register = (props) => {
           type: "error",
           textAlign: "right",
         });
+        window.scrollTo(0, 0);
         return;
       }
     }
@@ -74,8 +79,17 @@ const Register = (props) => {
       name: firstName + " " + lastName,
       password: password,
     })
-      .then(() => props.navigation.navigate("Login"))
-      .catch((err) => console.log("error in registration"));
+      .then(() => navigate("Login"))
+      .catch(() => {
+        showMessage({
+          message: "אירעה שגיאה",
+          description: "אנא בדוק את פרטייך ונסה מחדש",
+          type: "error",
+          textAlign: "right",
+        });
+        window.scrollTo(0, 0);
+        return;
+      });
   };
 
   const checkIDValidation = () => {
@@ -147,7 +161,6 @@ const Register = (props) => {
           </View>
         </View>
       </View>
-      <FlashMessage position="top" />
     </View>
   );
 };
