@@ -8,10 +8,10 @@ var app = express();
 var mongoDB = "mongodb+srv://dollarz:dollarz123@omerm-cluster.pzgxz.mongodb.net/dollarz?retryWrites=true&w=majority";
 
 const routes = require("./routes/router").default;
-const goals = require("./src/controllers/goalController").default;
-const chores = require("./src/controllers/choreController").default;
-const user = require("./src/controllers/userController").default;
-const child = require("./src/controllers/childController").default;
+const goals = require("./src/goal/goalController").default;
+const chores = require("./src/chore/choreController").default;
+const user = require("./src/user/userController").default;
+const child = require("./src/child/childController").default;
 
 app.use(cors());
 
