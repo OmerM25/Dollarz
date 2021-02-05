@@ -3,9 +3,10 @@ var jwt = require("jsonwebtoken");
 var mongoose = require("mongoose");
 
 var router = express.Router();
-var User = require("./user");
+var User = require("../user/user");
 var Parent = require("../parent/parent");
 var Child = require("../child/child");
+
 const signUserToJwt = (personId, currUser, res) => {
   var userObj = {
     _id: personId._id,
@@ -52,34 +53,64 @@ router.post("/login", function (req, res, next) {
     });
 });
 
-// Register new child to the DB
-router.post("/registerChild", function (req, res, next) {
+// Register new parent to the DB
+router.post("/registerParent", function (req, res, next) {
   const user = new User({
     idNumber: req.body.id,
     name: req.body.name,
     password: req.body.password,
   });
 
-  // Get parent token
-  const token = req.headers.authorization.split(" ")[1];
+  user
+    .save()
+    .then(() => {
+      const parent = new Parent({
+        userDetails: user._id,
+        children: [],
+        chores: [],
+      });
+      parent.save().then(res.status(200).send());
+    })
+    .catch((err) => res.status(500).send("error"));
+});
 
-  // Get parent _id
-  const parentId = jwt.decode(token).user._id;
-
+// Register new child to the DB
+router.post("/registerChild", function (req, res, next) {
   try {
+    // Get sender token
+    const token = req.headers.authorization.split(" ")[1];
+
+    // Get sender _id
+    const senderId = jwt.decode(token)._id;
+
+    // only parents can register childrens
+    Parent.findOne({ _id: senderId }, (err, parent) => {
+      if (err || parent === undefined) {
+        return res.status(401).send("no auth");
+      }
+    }).catch((err) => {
+      return res.status(401).send("no auth");
+    });
+
+    const user = new User({
+      idNumber: req.body.id,
+      name: req.body.name,
+      password: req.body.password,
+    });
+
     user.save().then(() => {
       const child = new Child({
         userDetails: user._id,
-        parent: parentId,
+        parent: senderId,
         money: "",
         goals: [],
         requests: [],
         gameScore: [],
       });
-      child.save().then(res.status(200).send());
+      child.save().then(res.status(200).send("child created successfully"));
     });
-  } catch (error) {
-    return res.status(500).send(error);
+  } catch (err) {
+    res.status(500).send("error creating new child");
   }
 });
 

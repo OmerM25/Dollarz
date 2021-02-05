@@ -3,7 +3,7 @@ var jwt = require("jsonwebtoken");
 var mongoose = require("mongoose");
 
 var router = express.Router();
-var Child = require("../child/child");
+var Child = require("./child");
 var Parent = require("../parent/parent");
 const User = require("../user/user");
 
