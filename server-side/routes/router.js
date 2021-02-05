@@ -6,7 +6,7 @@ var jwt = require("jsonwebtoken");
 // Authenticate using jwt using middleware
 router.use((req, res, next) => {
   // Exclude login and registration page
-  if (req.originalUrl.toString() !== "/user/login" && req.originalUrl.toString() !== "/user/register") {
+  if (req.originalUrl.toString() !== "/user/login" && req.originalUrl.toString() !== "/user/registerParent") {
     const bearerHeader = req.headers["authorization"];
 
     if (typeof bearerHeader !== "undefined") {
@@ -15,7 +15,7 @@ router.use((req, res, next) => {
       const bearerToken = bearer[1];
       req.token = bearerToken;
 
-      jwt.verify(req.token, "dollarzJwt", (err, authData) => {
+      jwt.verify(req.token, "dollarz#jwt", (err, authData) => {
         if (err) {
           res.sendStatus(403);
         }

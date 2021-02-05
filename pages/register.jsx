@@ -74,7 +74,7 @@ const Register = (props) => {
       name: firstName + " " + lastName,
       password: password,
     })
-      .then(() => props.navigation.navigate("MainLayout"))
+      .then(() => props.navigation.navigate("Login"))
       .catch((err) => console.log("error in registration"));
   };
 
