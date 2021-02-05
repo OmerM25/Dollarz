@@ -40,7 +40,6 @@ const Login = ({ navigation: { navigate } }) => {
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
       <TextInput value={password} onChangeText={setPassword} style={styles.input} />
-      <FlashMessage position="top" />
       <Button title="התחבר" color={"#3A23CD"} onPress={handleLogin}></Button>
       <Button title="הורה? הירשם עכשו" color={"#3A23CD"} onPress={() => navigate("Register")}></Button>
     </View>
