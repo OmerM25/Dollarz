@@ -7,47 +7,46 @@ var User = require("../user/user");
 var Parent = require("../parent/parent");
 var Child = require("../child/child");
 
+const signUserToJwt = (personId, currUser, res) => {
+  var userObj = {
+    _id: personId,
+    id: currUser.idNumber,
+    name: currUser.name,
+  };
+
+  jwt.sign(userObj, "dollarz#jwt", (err, token) => {
+    if (err) {
+      console.log(err);
+      res.status(401).send("server error");
+    } else {
+      res.json({
+        token,
+      });
+
+      res.status(200).send();
+    }
+  });
+};
+
 router.post("/login", function (req, res, next) {
   const userId = req.body.userId;
   const password = req.body.password;
-  let personId = "";
 
   User.findOne({ idNumber: userId, password: password })
     .then((currUser) => {
       // Check if parent
       Parent.findOne({ userDetails: currUser._id }, "_id", (err, parentId) => {
         if (parentId) {
-          personId = parentId;
+          return signUserToJwt(parentId, currUser, res);
         } else {
           // check if child
           Child.findOne({ userDetails: currUser._id }, "_id").then((childId) => {
             if (childId) {
-              personId = childId;
+              return signUserToJwt(childId, currUser, res);
             }
           });
         }
-
-        if (personId !== "") {
-          var userObj = {
-            _id: personId,
-            id: currUser.idNumber,
-            name: currUser.name,
-          };
-
-          jwt.sign(userObj, "dollarz#jwt", (err, token) => {
-            if (err) {
-              console.log(err);
-              res.status(401).send("server error");
-            } else {
-              res.json({
-                token,
-              });
-
-              res.status(200).send();
-            }
-          });
-        } else return res.status(401).send("user does not exist");
-      });
+      }).catch((err) => console.log(err));
     })
     .catch((err) => {
       res.status(401).send("user does not exist");
