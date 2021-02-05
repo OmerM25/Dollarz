@@ -46,7 +46,7 @@ router.post("/login", function (req, res, next) {
             }
           });
         }
-      }).catch((err) => console.log(err));
+      });
     })
     .catch((err) => {
       res.status(401).send("user does not exist");
