@@ -9,7 +9,7 @@ var Child = require("../child/child");
 
 const signUserToJwt = (personId, currUser, res) => {
   var userObj = {
-    _id: personId,
+    _id: personId._id,
     id: currUser.idNumber,
     name: currUser.name,
   };
