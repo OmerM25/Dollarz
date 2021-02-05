@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
     })
 
     const token = req.headers.authorization.split(" ")[1];
-    var childId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
+    var childId = mongoose.Types.ObjectId(jwt.decode(token)._id);
 
     // Create the new goal & Add it to the child's goals array.
     goal.save().then(goal => {

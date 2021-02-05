@@ -16,7 +16,7 @@ const Goal = () => {
       description: description,
       amount: amount,
       isAchieved: false
-    }).then(() => {
+    }).then((goal) => {
       setVisibility(!visibility)
       showMessage({
         message: "המטרה נשמרה בהצלחה!",
