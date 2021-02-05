@@ -13,9 +13,9 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
-        initialRouteName="AskMoney">
+        initialRouteName="Login">
         <Stack.Screen name="MainLayout" component={MainLayout} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -24,6 +24,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-
-

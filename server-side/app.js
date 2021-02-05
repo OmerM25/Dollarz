@@ -1,6 +1,6 @@
 var express = require("express");
 var mongoose = require("mongoose");
-var Parent = require("./src/parent/parent")
+var Parent = require("./src/parent/parent");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 
@@ -11,6 +11,7 @@ const routes = require("./routes/router").default;
 const goals = require("./src/controllers/goalController").default;
 const chores = require("./src/controllers/choreController").default;
 const user = require("./src/controllers/userController").default;
+const child = require("./src/controllers/childController").default;
 
 app.use(cors());
 
@@ -23,6 +24,7 @@ app.use(
 app.use(bodyParser.json());
 app.use("/", routes);
 app.use("/goals", goals);
+app.use("/child", child);
 app.use("/chore", chores);
 app.use("/user", user);
 
