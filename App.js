@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./pages/login";
 import MainLayout from "./pages/mainLayout";
 import Register from "./pages/register";
+import AskMoney from "./pages/askmoney";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -12,16 +13,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false
+          headerShown: false,
         }}
         initialRouteName="Login">
         <Stack.Screen name="MainLayout" component={MainLayout} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="AskMoney" component={AskMoney} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-
-

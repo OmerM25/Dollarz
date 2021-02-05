@@ -6,47 +6,50 @@ var router = express.Router();
 var User = require("./user");
 var Parent = require("../parent/parent");
 var Child = require("../child/child");
+const signUserToJwt = (personId, currUser, res) => {
+  var userObj = {
+    _id: personId._id,
+    id: currUser.idNumber,
+    name: currUser.name,
+  };
+
+  jwt.sign(userObj, "dollarz#jwt", (err, token) => {
+    if (err) {
+      console.log(err);
+      res.status(401).send("server error");
+    } else {
+      res.json({
+        token,
+      });
+
+      res.status(200).send();
+    }
+  });
+};
 
 router.post("/login", function (req, res, next) {
   const userId = req.body.userId;
   const password = req.body.password;
-  const currUser = User.findOne({ idNumber: userId }, (err, docs) => {
-    if (docs && docs.password === password) {
 
-      const user = {
-        id: currUser.idNumber,
-        name: currUser.name,
-      };
-
-      jwt.sign({ user }, "dollarzJwt", (err, token) => {
-        res.json({
-          token,
-        });
-      }).then(res.status(200).send());
-    } else return res.status(401).send("user does not exist");
-  });
-});
-
-// Register new parent to the DB
-router.post("/registerParent", function (req, res, next) {
-  const user = new User({
-    idNumber: req.body.id,
-    name: req.body.name,
-    password: req.body.password,
-  });
-
-  try {
-    user.save().then(() => {
-      const parent = new Parent({
-        userDetails: user._id,
-        children: [],
-        chores: [],
+  User.findOne({ idNumber: userId, password: password })
+    .then((currUser) => {
+      // Check if parent
+      Parent.findOne({ userDetails: currUser._id }, "_id", (err, parentId) => {
+        if (parentId) {
+          return signUserToJwt(parentId, currUser, res);
+        } else {
+          // check if child
+          Child.findOne({ userDetails: currUser._id }, "_id").then((childId) => {
+            if (childId) {
+              return signUserToJwt(childId, currUser, res);
+            }
+          });
+        }
       });
-      parent.save().then(res.status(200).send());
+    })
+    .catch((err) => {
+      res.status(401).send("user does not exist");
     });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
 });
 
 // Register new child to the DB

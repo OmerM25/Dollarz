@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Text, Button, Image } from "react-native";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import FlashMessage from "react-native-flash-message";
+import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import AxiosInstance from "../utils/AxiosInstance";
 
 const Register = (props) => {
@@ -75,7 +74,7 @@ const Register = (props) => {
       name: firstName + " " + lastName,
       password: password,
     })
-      .then(() => props.navigation.navigate("MainLayout"))
+      .then(() => props.navigation.navigate("Login"))
       .catch((err) => console.log("error in registration"));
   };
 

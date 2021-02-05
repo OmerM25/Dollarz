@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var express = require("express");
+var jwt = require("jsonwebtoken");
 var router = express.Router();
 var Goal = require("./goal")
 var Child = require("../child/child")
@@ -12,8 +13,8 @@ router.post("/", (req, res) => {
         isAchieved: req.body.isAchieved
     })
 
-    // TODO: Check with Sapir if there's a way to get the childId using the login token?
-    var childId = mongoose.Types.ObjectId(req.body.childId);
+    const token = req.headers.authorization.split(" ")[1];
+    var childId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
 
     // Create the new goal & Add it to the child's goals array.
     goal.save().then(goal => {
