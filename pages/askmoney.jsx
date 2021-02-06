@@ -1,19 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Image, TextInput, TouchableOpacity, Button } from "react-native";
 import { CustomText } from "../common/CustomText";
+import AxiosInstance from "../utils/AxiosInstance";
+import { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 
-
-const imgApprove = require("../images/approve.png");
-const imgDontApprove = require("../images/dontapprove.png");
 const imgWallet = require("../images/wallet.png");
 
-const AskMoney = () => {
+const AskMoney = ({ navigation: { navigate } }) => {
+
+
+  const [visibility, setVisibility] = useState(false);
+  const [reason, setReason] = useState("");
+  const [amount, setAmount] = useState("");
+  const saveNewRequest = () => {
+    AxiosInstance.post('request', {  
+      amount: amount,
+      reason: reason
+    }).then(() => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "הבקשה שלך נשלחה להורים!",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      })
+      navigate("HomeChild");
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לשלוח את הבקשה להורים",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+
+  const saveNewRequest2 = () => {
+    AxiosInstance.get('request').then((resp) => {
+    alert(resp.data.amount);
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לשלוח את הבקשה להורים",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+
   return (
     <View style={styles.view}>
+        <FlashMessage position="top" />
 <CustomText style={styles.headline}>
     כמה כסף אתה צריך?
         </CustomText>
         <TextInput
+         value={amount}
+         onChangeText={setAmount}
             style={styles.input}
             keyboardType="numeric"
           />
@@ -21,9 +74,11 @@ const AskMoney = () => {
     בשביל מה?
         </CustomText>
         <TextInput
+         value={reason}
+         onChangeText={setReason}
             style={styles.input}
           />
-      <TouchableOpacity style={styles.button} onPress={()=>{alert("הבקשה נשלחה להורים")}}>
+      <TouchableOpacity style={styles.button} onPress={saveNewRequest2}>
       <CustomText style={styles.buttontext}>
     בקש כסף
         </CustomText>

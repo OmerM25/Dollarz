@@ -6,6 +6,7 @@ var Goal = require("./goal")
 var Child = require("../child/child")
 
 // Create a new goal.
+
 router.post("/", (req, res) => {
     const goal = new Goal({
         description: req.body.description,
