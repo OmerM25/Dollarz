@@ -1,19 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TextInput, TouchableOpacity } from "react-native";
 import { CustomText } from "../common/CustomText";
+import AxiosInstance from "../utils/AxiosInstance";
+import { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
+
 
 const imgApprove = require("../images/approve.png");
 const imgDontApprove = require("../images/dontapprove.png");
 const imgWallet = require("../images/wallet.png");
 
 const History = () => {
+  const [visibility, setVisibility] = useState(false);
+  const [reason, setReason] = useState("");
+  const [amount, setAmount] = useState("");
+  const [requestId, setRequestId] = useState("");
+  const getLatestRequest = () => {
+    AxiosInstance.get('request').then((resp) => {
+      setReason(resp.data.reason);
+      setAmount((resp.data.amount).toString());
+      setRequestId(resp.data._id);
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לשלוח את הבקשה להורים",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+  const approveRequest = () => {
+    AxiosInstance.put('request/approve/'+{requestId}, {status: '1'}).then((resp) => {
+    alert("hh");
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לאשר את הבקשם",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+  useEffect(() => {
+    getLatestRequest();
+    approveRequest();
+  });
+
   return (
     <View style={styles.view}>
       <CustomText style={styles.headline}>
         דני מבקש לקבל
         </CustomText>
         <CustomText style={styles.money}>
-          20 
+          {amount}
           <CustomText style={styles.moneytype}>
           ש"ח 
         </CustomText>
@@ -22,13 +69,13 @@ const History = () => {
         בשביל:
         </CustomText>
         <CustomText style={styles.value}>
-        לקנות פיצה עם רועי
+        {reason}
         </CustomText>
         <View style={{flex: 1, flexDirection: 'row'}}>
         <TouchableOpacity style={styles.button} onPress={()=>{alert("לא אישרת")}}>
           <Image source={imgDontApprove}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>{alert("אישרת")}}>
+        <TouchableOpacity style={styles.button} onPress={()=>{approveRequest()}}>
           <Image source={imgApprove}/>
         </TouchableOpacity>
         </View>  

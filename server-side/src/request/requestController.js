@@ -54,5 +54,12 @@ Request.findOne({ parentId: '1212'}, (err, request) => {
 
   });
 
+  router.put("/approve/:id", (req, res) => {
+    Goal.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
+        // Check for erros
+        if (err) { res.send(err) }
+        else { res.send(result) }
+    });
+});
 
 export default router;

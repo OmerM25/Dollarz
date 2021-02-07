@@ -7,7 +7,7 @@ import FlashMessage from "react-native-flash-message";
 
 const imgWallet = require("../images/wallet.png");
 
-const AskMoney = ({ navigation: { navigate } }) => {
+const AskMoney = ({ navigation: { navigate }}) => {
 
 
   const [visibility, setVisibility] = useState(false);
@@ -39,25 +39,6 @@ const AskMoney = ({ navigation: { navigate } }) => {
       });
     })
   }
-
-
-  const saveNewRequest2 = () => {
-    AxiosInstance.get('request').then((resp) => {
-    alert(resp.data.amount);
-    }).catch((err) => {
-      setVisibility(!visibility)
-      showMessage({
-        message: "לא הצלחנו לשלוח את הבקשה להורים",
-        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
-        type: "danger",
-        textAlign: "right",
-        duration: 3000,
-        icon: "auto",
-      });
-    })
-  }
-
-
   return (
     <View style={styles.view}>
         <FlashMessage position="top" />
@@ -78,7 +59,7 @@ const AskMoney = ({ navigation: { navigate } }) => {
          onChangeText={setReason}
             style={styles.input}
           />
-      <TouchableOpacity style={styles.button} onPress={saveNewRequest2}>
+      <TouchableOpacity style={styles.button} onPress={saveNewRequest}>
       <CustomText style={styles.buttontext}>
     בקש כסף
         </CustomText>
