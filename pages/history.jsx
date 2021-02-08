@@ -10,8 +10,9 @@ const imgApprove = require("../images/approve.png");
 const imgDontApprove = require("../images/dontapprove.png");
 const imgWallet = require("../images/wallet.png");
 
-const History = () => {
+const History = ({navigation: { navigate }}) => {
   const [visibility, setVisibility] = useState(false);
+  const [show, setShow] = useState(false);
   const [reason, setReason] = useState("");
   const [amount, setAmount] = useState("");
   const [requestId, setRequestId] = useState("");
@@ -20,10 +21,29 @@ const History = () => {
       setReason(resp.data.reason);
       setAmount((resp.data.amount).toString());
       setRequestId(resp.data._id);
+      setShow(true)
+    }).catch((err) => {
+      
+    })
+  }
+
+  const approveRequest = () => {
+    var reqId = {requestId}.requestId;
+    
+    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}).then((resp) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "הבקשה אושרה בהצלחה",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      })
+      navigate("HomeChild");
     }).catch((err) => {
       setVisibility(!visibility)
       showMessage({
-        message: "לא הצלחנו לשלוח את הבקשה להורים",
+        message: "לא הצלחנו לאשר את הבקשה",
         description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
         type: "danger",
         textAlign: "right",
@@ -33,13 +53,23 @@ const History = () => {
     })
   }
 
-  const approveRequest = () => {
-    AxiosInstance.put('request/approve/'+{requestId}, {status: '1'}).then((resp) => {
-    alert("hh");
+  const rejectRequest = () => {
+    var reqId = {requestId}.requestId;
+    
+    AxiosInstance.put('request/reject/'+ reqId, {status: '2'}).then((resp) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "הבקשה נדחתה בהצלחה",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      })
+      navigate("HomeChild");
     }).catch((err) => {
       setVisibility(!visibility)
       showMessage({
-        message: "לא הצלחנו לאשר את הבקשם",
+        message: "לא הצלחנו לדחות את הבקשה",
         description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
         type: "danger",
         textAlign: "right",
@@ -53,7 +83,7 @@ const History = () => {
     getLatestRequest();
   });
 
-  return (
+  return (show &&
     <View style={styles.view}>
       <CustomText style={styles.headline}>
         דני מבקש לקבל
@@ -71,7 +101,7 @@ const History = () => {
         {reason}
         </CustomText>
         <View style={{flex: 1, flexDirection: 'row'}}>
-        <TouchableOpacity style={styles.button} onPress={()=>{alert("לא אישרת")}}>
+        <TouchableOpacity style={styles.button} onPress={()=>{rejectRequest()}}>
           <Image source={imgDontApprove}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={()=>{approveRequest()}}>
