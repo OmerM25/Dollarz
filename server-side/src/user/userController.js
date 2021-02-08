@@ -114,4 +114,24 @@ router.post("/registerChild", function (req, res, next) {
   }
 });
 
+router.get("/isParent", function (req, res, next) {
+  // Get sender token
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const senderId = jwt.decode(token)._id;
+
+  Parent.findById(senderId, (err, parent) => {
+    if (parent) {
+      return res.status(200).send("true");
+    }
+
+    if (err) {
+      return res.status(500).send("server error");
+    }
+
+    return res.status(200).send("false");
+  });
+});
+
 export default router;
