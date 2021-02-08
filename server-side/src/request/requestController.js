@@ -39,11 +39,9 @@ router.get('/', function (req, res) {
 
   // Get sender token
   const token = req.headers.authorization.split(" ")[1];
+  var userId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
 
-  // Get sender _id
-  const sender = jwt.decode(token).user;
-  let requestObj = new Request();
-Request.findOne({ parentId: '1212'}, (err, request) => {
+Request.findOne({ parentId: userId}, (err, request) => {
     if (err || !request) {
       res.status(500).send("no requests");
     } else {

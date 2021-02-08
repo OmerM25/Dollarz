@@ -51,7 +51,6 @@ const History = () => {
 
   useEffect(() => {
     getLatestRequest();
-    approveRequest();
   });
 
   return (
