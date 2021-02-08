@@ -11,6 +11,7 @@ const img = require("../images/LoginPage.png");
 const Login = ({ navigation: { navigate } }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
   const handleLogin = () => {
     AxiosInstance.post("user/login", {
       userId: id,
@@ -21,7 +22,11 @@ const Login = ({ navigation: { navigate } }) => {
         AxiosInstance.defaults.headers.common = {
           Authorization: "Bearer " + res.data.token,
         };
-        navigate("MainLayout");
+
+        // Get Indication from server which type is the user
+        AxiosInstance.get("/user/isParent")
+          .then((isPersonParent) => (isPersonParent.data === true ? navigate("ParentTabs") : navigate("ChildTabs")))
+          .catch((err) => console.log(err));
       })
       .catch((err) =>
         showMessage({
