@@ -21,7 +21,7 @@ const HomeChild = ({ navigation: { navigate } }) => {
         title="אני רוצה להשתמש בכסף"
         color="#4525F2"
         onPress={() => {
-          navigate("Login");
+          navigate("AskMoney");
         }}
       />
     </View>

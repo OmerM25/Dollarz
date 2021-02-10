@@ -1,9 +1,12 @@
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var RequestSchema = new Schema({
-    senderId: {type: Number, required: true},
-    receiverId: {type: Number, required: true},
-    isApproved: {type: Number, required: true},
-    amount: {type: Number, required: true}
+    childId: {type: Number, required: true},
+    parentId: {type: Number, required: true},
+    status: {type: Number, required: true},
+    dateRequested: {type: Date, required: true},
+    amount: {type: Number, required: true},
+    reason: {type: String, required: true}
 });
 
 module.exports = mongoose.model('Request', RequestSchema);
