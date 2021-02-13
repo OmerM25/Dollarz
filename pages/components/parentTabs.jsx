@@ -5,7 +5,7 @@ import * as Pages from "../index";
 
 const Tab = createBottomTabNavigator();
 
-export default function childTabs() {
+export default function parentTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen

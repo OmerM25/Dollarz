@@ -40,7 +40,7 @@ const HomeChild = (props) => {
         title="אני רוצה להשתמש בכסף"
         color="#4525F2"
         onPress={() => {
-          props.navigation.navigate("Login");
+          props.navigation.navigate("AskMoney");
         }}
       />
     </View>
