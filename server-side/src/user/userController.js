@@ -98,16 +98,29 @@ router.post("/registerChild", function (req, res, next) {
       password: req.body.password,
     });
 
+    // register new user
     user.save().then(() => {
       const child = new Child({
         userDetails: user._id,
         parent: senderId,
-        money: "",
-        goals: [],
-        requests: [],
-        gameScore: [],
       });
-      child.save().then(res.status(200).send("child created successfully"));
+
+      // register new child
+      child.save().then(() => {
+        // update parent - add to him the new child
+        Parent.findByIdAndUpdate(
+          senderId,
+          { $push: { children: child._id } },
+          { new: true, useFindAndModify: false },
+          (err) => {
+            if (err) {
+              res.status(500).send("error creating new child");
+            } else {
+              res.status(200).send("child created successfully");
+            }
+          }
+        );
+      });
     });
   } catch (err) {
     res.status(500).send("error creating new child");
@@ -132,6 +145,16 @@ router.get("/isParent", function (req, res, next) {
 
     return res.status(200).send("false");
   });
+});
+
+router.get("/_id", (req, res) => {
+  // Get sender token
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const senderId = jwt.decode(token)._id;
+
+  res.status(200).send(senderId);
 });
 
 export default router;
