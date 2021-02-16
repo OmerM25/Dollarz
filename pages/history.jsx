@@ -4,6 +4,7 @@ import { CustomText } from "../common/CustomText";
 import AxiosInstance from "../utils/AxiosInstance";
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
+import axios from 'axios';
 
 
 const imgApprove = require("../images/approve.png");
@@ -29,8 +30,13 @@ const History = ({navigation: { navigate }}) => {
 
   const approveRequest = () => {
     var reqId = {requestId}.requestId;
-    
-    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}).then((resp) => {
+    //hardcoded for checking- couldnt get real id... 
+    var childId= "6023d0be0ae6fa4784deba2e"; 
+    axios.all([
+    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}),
+    AxiosInstance.put('child/updatemoney/'+ childId, {money: {amount}.amount})
+  ])
+    .then((resp) => {
       setVisibility(!visibility)
       showMessage({
         message: "הבקשה אושרה בהצלחה",
