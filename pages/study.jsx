@@ -1,15 +1,26 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, ListView } from "react-native";
 import { CustomText } from "../common/CustomText";
 
 const Study = () => {
   return (
     <View style={styles.view}>
+
       <CustomText style={styles.headline}> ידע זה כוח </CustomText>
       <CustomText style={{ marginTop: 30 }}>איזה כיף שבאת דני,</CustomText>
       <CustomText style={styles.textStyle}>ללמוד על כסף יכול להיות ממש כיף עם</CustomText>
       <CustomText style={styles.textStyle}> המשחקים והלומדות שלנו. </CustomText>
       <CustomText style={styles.textStyle}> אז למה אתה מחכה? בוא נתחיל לשחק </CustomText>
+      <ScrollView >
+        <View style={styles.images}>
+          <Image source={require('../assets/images/Books.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Price.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Trivia.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Think.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Shopping.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Videos.jpeg')} style={styles.img} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -18,8 +29,9 @@ export default Study;
 
 const styles = StyleSheet.create({
   view: {
-    alignItems: "center",
     marginTop: 70,
+    alignItems: "center",
+    flex: 1,
   },
   headline: {
     fontSize: 30,
@@ -28,5 +40,18 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     marginTop: 3
+  },
+  img: {
+    width: 190,
+    height: 150,
+    marginTop: 40,
+    marginLeft: 7,
+    borderRadius: 10,
+    marginRight: 10
+  },
+  images: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flex: 1,
   }
 });
