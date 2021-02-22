@@ -59,4 +59,12 @@ router.post("/", function (req, res) {
   }
 });
 
+router.put("/updatemoney/:id", (req, res) => {
+  Child.findByIdAndUpdate(req.params.id, {$inc:req.body} , function(err, result) {
+      // Check for erros
+      if (err) { res.send(err) }
+      else { res.send(result) }
+  });
+});
+
 export default router;
