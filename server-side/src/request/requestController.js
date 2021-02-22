@@ -4,68 +4,97 @@ var mongoose = require("mongoose");
 
 var router = express.Router();
 var Child = require("../child/child");
+var User = require("../user/user");
+var Parent = require("../parent/parent");
 const Request = require("./request");
 
 // Create
-router.post('/', function (req, res) {
-
+router.post("/", function (req, res) {
   const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const childId = jwt.decode(token)._id;
+  const childTz = jwt.decode(token).id;
+
+  let parentId;
+
   //var childId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
   // there are no childrens yet- so im just cheking
-  var childId= '123';
-  let childobj = Child.findById(childId);
-  //let parentId= childobj.parent;
-  let parentId= '1212';
+  Child.findById(childId, (err, child) => {
+    if (err || !child) {
+      res.status(500).send("error");
+    }
 
-    const request = new Request({
-        childId: childId,
-        parentId: parentId,
-        status: '0',
-        dateRequested: Date.now(),
-        amount: req.body.amount,
-        reason: req.body.reason
-    });
+    Parent.findById(child.parent, (err, parent) => {
+      if (err || !parent) {
+        res.status(500).send("error");
+      }
 
-    request.save().then((err, chore) => {
-        if (err) { res.send(err) }
-        else {
-            res.status(200).send("request created successfully");
+      User.findById(parent.userDetails, (err, user) => {
+        if (err || !user) {
+          res.status(500).send("error");
         }
+        parentId = user.idNumber;
+
+        const request = new Request({
+          childId: childTz,
+          parentId: parentId,
+          status: "0",
+          dateRequested: Date.now(),
+          amount: req.body.amount,
+          reason: req.body.reason,
+        });
+
+        request.save().then((err, chore) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.status(200).send("request created successfully");
+          }
+        });
+      });
     });
+    //let parentId= childobj.parent;
+    //let parentId = req.body.//"1212";
+  });
 });
 
 // get the latest request
-router.get('/', function (req, res) {
-
+router.get("/", function (req, res) {
   // Get sender token
   //const token = req.headers.authorization.split(" ")[1];
- // var userId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
+  // var userId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
 
-Request.findOne({ parentId: '1212', status: '0'}, (err, request) => {
-    if (err ) {
+  Request.findOne({ parentId: "1212", status: "0" }, (err, request) => {
+    if (err) {
       res.status(500).send("no requests");
     } else {
       console.log("request is- ", request);
       res.status(200).send(request);
     }
   });
+});
 
+router.put("/approve/:id", (req, res) => {
+  Request.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
+    // Check for erros
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
   });
-
-  router.put("/approve/:id", (req, res) => {
-    Request.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
-        // Check for erros
-        if (err) { res.send(err) }
-        else { res.send(result) }
-    });
 });
 
 router.put("/reject/:id", (req, res) => {
-    Request.findByIdAndUpdate(req.params.id, req.body, function(err, result) {
-        // Check for erros
-        if (err) { res.send(err) }
-        else { res.send(result) }
-    });
+  Request.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
+    // Check for erros
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
 });
 
 export default router;
