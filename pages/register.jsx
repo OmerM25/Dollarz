@@ -119,8 +119,8 @@ const Register = ({ navigation: { navigate } }) => {
         <Image style={{ width: 300, height: 150 }} source={require("../assets/images/image-form.png")} />
       </View>
       <View style={styles.footer}>
-        <Text style={{ fontSize: 28, marginTop: 25, textAlign: "center" }}> איזה כיף שהחלטתם להירשם!! </Text>
-        <Text style={{ fontSize: 15, color: "#4525F2", marginTop: 25, marginBottom: 20, textAlign: "center" }}>
+        <Text style={{ fontSize: 28, textAlign: "center" }}> איזה כיף שהחלטתם להירשם!! </Text>
+        <Text style={{ fontSize: 15, color: "#4525F2", marginTop: 10, marginBottom: 10, textAlign: "center" }}>
           שימו לב- מלאו את הפרטים של אחד ההורים, שניכם תוכלו להחבר יחד לאותו החשבון
         </Text>
         <View style={styles.form}>
@@ -171,9 +171,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F0F0",
   },
   header: {
-    flex: 0.9,
+    flex: 0.73,
     alignItems: "center",
-    marginTop: 90,
+    marginTop: 40,
     marginBottom: 20,
     paddingHorizontal: 10,
   },
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1.0,
     width: 260,
     height: 35,
-    marginBottom: 30,
+    marginBottom: 15,
     fontSize: 17,
   },
 });
