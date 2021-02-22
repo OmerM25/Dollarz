@@ -6,7 +6,7 @@ import AxiosInstance from "../../utils/AxiosInstance";
 
 const Tab = createBottomTabNavigator();
 
-export default function childTabs() {
+export default function childTabs(props) {
   const [child, setChild] = useState("");
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function childTabs() {
       />
       <Tab.Screen
         name="HomeChild"
-        children={() => <Pages.HomeChild child={child} />}
+        children={() => <Pages.HomeChild navigation={props.navigation} child={child} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="home" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",
