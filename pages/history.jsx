@@ -1,19 +1,101 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TextInput, TouchableOpacity } from "react-native";
 import { CustomText } from "../common/CustomText";
+import AxiosInstance from "../utils/AxiosInstance";
+import { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
+import axios from 'axios';
+
 
 const imgApprove = require("../images/approve.png");
 const imgDontApprove = require("../images/dontapprove.png");
 const imgWallet = require("../images/wallet.png");
 
-const History = () => {
-  return (
+const History = ({navigation: { navigate }}) => {
+  const [visibility, setVisibility] = useState(false);
+  const [show, setShow] = useState(false);
+  const [reason, setReason] = useState("");
+  const [amount, setAmount] = useState("");
+  const [requestId, setRequestId] = useState("");
+  const getLatestRequest = () => {
+    AxiosInstance.get('request').then((resp) => {
+      setReason(resp.data.reason);
+      setAmount((resp.data.amount).toString());
+      setRequestId(resp.data._id);
+      setShow(true)
+    }).catch((err) => {
+      
+    })
+  }
+
+  const approveRequest = () => {
+    var reqId = {requestId}.requestId;
+    //hardcoded for checking- couldnt get real id... 
+    var childId= "6023d0be0ae6fa4784deba2e"; 
+    axios.all([
+    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}),
+    AxiosInstance.put('child/updatemoney/'+ childId, {money: {amount}.amount})
+  ])
+    .then((resp) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "הבקשה אושרה בהצלחה",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      })
+      navigate("HomeChild");
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לאשר את הבקשה",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+  const rejectRequest = () => {
+    var reqId = {requestId}.requestId;
+    
+    AxiosInstance.put('request/reject/'+ reqId, {status: '2'}).then((resp) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "הבקשה נדחתה בהצלחה",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      })
+      navigate("HomeChild");
+    }).catch((err) => {
+      setVisibility(!visibility)
+      showMessage({
+        message: "לא הצלחנו לדחות את הבקשה",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
+  useEffect(() => {
+    getLatestRequest();
+  });
+
+  return (show &&
     <View style={styles.view}>
       <CustomText style={styles.headline}>
         דני מבקש לקבל
         </CustomText>
         <CustomText style={styles.money}>
-          20 
+          {amount}
           <CustomText style={styles.moneytype}>
           ש"ח 
         </CustomText>
@@ -22,13 +104,13 @@ const History = () => {
         בשביל:
         </CustomText>
         <CustomText style={styles.value}>
-        לקנות פיצה עם רועי
+        {reason}
         </CustomText>
         <View style={{flex: 1, flexDirection: 'row'}}>
-        <TouchableOpacity style={styles.button} onPress={()=>{alert("לא אישרת")}}>
+        <TouchableOpacity style={styles.button} onPress={()=>{rejectRequest()}}>
           <Image source={imgDontApprove}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>{alert("אישרת")}}>
+        <TouchableOpacity style={styles.button} onPress={()=>{approveRequest()}}>
           <Image source={imgApprove}/>
         </TouchableOpacity>
         </View>  

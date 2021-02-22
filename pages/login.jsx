@@ -11,6 +11,7 @@ const img = require("../images/LoginPage.png");
 const Login = ({ navigation: { navigate } }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
   const handleLogin = () => {
     AxiosInstance.post("user/login", {
       userId: id,
@@ -21,7 +22,11 @@ const Login = ({ navigation: { navigate } }) => {
         AxiosInstance.defaults.headers.common = {
           Authorization: "Bearer " + res.data.token,
         };
-        navigate("MainLayout");
+
+        // Get Indication from server which type is the user
+        AxiosInstance.get("/user/isParent")
+          .then((isPersonParent) => (isPersonParent.data === true ? navigate("ParentTabs") : navigate("ChildTabs")))
+          .catch((err) => console.log(err));
       })
       .catch((err) =>
         showMessage({
@@ -40,7 +45,6 @@ const Login = ({ navigation: { navigate } }) => {
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
       <TextInput value={password} onChangeText={setPassword} style={styles.input} />
-      <FlashMessage position="top" />
       <Button title="התחבר" color={"#3A23CD"} onPress={handleLogin}></Button>
       <Button title="הורה? הירשם עכשו" color={"#3A23CD"} onPress={() => navigate("Register")}></Button>
     </View>
