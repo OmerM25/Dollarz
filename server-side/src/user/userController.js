@@ -157,4 +157,15 @@ router.get("/_id", (req, res) => {
   res.status(200).send(senderId);
 });
 
+router.get("/getUserByTz/:tz", (req, res) => {
+  User.findOne({idNumber: req.params.tz}, (err, user) => {
+    if (err || !user) {
+      res.status(500).send("error");
+    }
+    else {
+      res.status(200).send(user);
+    }
+  });
+});
+
 export default router;

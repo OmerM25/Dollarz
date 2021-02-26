@@ -60,10 +60,15 @@ router.post("/", function (req, res) {
 });
 
 router.put("/updatemoney/:id", (req, res) => {
-  Child.findByIdAndUpdate(req.params.id, {$inc:req.body} , function(err, result) {
+  User.findOne({idNumber: req.params.id}, (err, user) => {
+        if (err || !user) {
+          res.status(500).send("error");
+        }
+  Child.findOneAndUpdate({userDetails: user._id}, {$inc:req.body} , function(err, result) {
       // Check for erros
       if (err) { res.send(err) }
       else { res.send(result) }
+   });
   });
 });
 
