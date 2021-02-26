@@ -16,13 +16,23 @@ const History = ({navigation: { navigate }}) => {
   const [show, setShow] = useState(false);
   const [reason, setReason] = useState("");
   const [amount, setAmount] = useState("");
+  const [childTz, setChildTz] = useState("");
+  const [childName, setChildName] = useState("");
   const [requestId, setRequestId] = useState("");
   const getLatestRequest = () => {
     AxiosInstance.get('request').then((resp) => {
       setReason(resp.data.reason);
       setAmount((resp.data.amount).toString());
       setRequestId(resp.data._id);
+      setChildTz((resp.data.childId).toString());
       setShow(true)
+    }).catch((err) => {
+      
+    })
+  }
+  const getRequestChildName = () => {
+    AxiosInstance.get('user/getUserByTz/'+ {childTz}.childTz).then((resp) => {
+      setChildName(resp.data.name);
     }).catch((err) => {
       
     })
@@ -30,11 +40,11 @@ const History = ({navigation: { navigate }}) => {
 
   const approveRequest = () => {
     var reqId = {requestId}.requestId;
-    //hardcoded for checking- couldnt get real id... 
-    var childId= "6023d0be0ae6fa4784deba2e"; 
+    var childTzId= {childTz}.childTz;
+    var moneyChange = Math.abs({amount}.amount)*-1;
     axios.all([
-    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}),
-    AxiosInstance.put('child/updatemoney/'+ childId, {money: {amount}.amount})
+   AxiosInstance.put('request/approve/'+ reqId, {status: '1'}),
+   AxiosInstance.put('child/updatemoney/'+ childTzId, {money: moneyChange})
   ])
     .then((resp) => {
       setVisibility(!visibility)
@@ -87,12 +97,13 @@ const History = ({navigation: { navigate }}) => {
 
   useEffect(() => {
     getLatestRequest();
+    getRequestChildName();
   });
 
   return (show &&
     <View style={styles.view}>
       <CustomText style={styles.headline}>
-        דני מבקש לקבל
+        {childName} מבקש לקבל
         </CustomText>
         <CustomText style={styles.money}>
           {amount}
