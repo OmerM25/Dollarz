@@ -47,6 +47,7 @@ const History = ({navigation: { navigate }}) => {
    AxiosInstance.put('child/updatemoney/'+ childTzId, {money: moneyChange})
   ])
     .then((resp) => {
+      setShow(!show)
       setVisibility(!visibility)
       showMessage({
         message: "הבקשה אושרה בהצלחה",
@@ -55,8 +56,9 @@ const History = ({navigation: { navigate }}) => {
         duration: 3000,
         icon: "auto"
       })
-      navigate("HomeChild");
+     // navigate("HomeChild");
     }).catch((err) => {
+      setShow(!show)
       setVisibility(!visibility)
       showMessage({
         message: "לא הצלחנו לאשר את הבקשה",
@@ -73,6 +75,7 @@ const History = ({navigation: { navigate }}) => {
     var reqId = {requestId}.requestId;
     
     AxiosInstance.put('request/reject/'+ reqId, {status: '2'}).then((resp) => {
+      setShow(!show)
       setVisibility(!visibility)
       showMessage({
         message: "הבקשה נדחתה בהצלחה",
@@ -81,8 +84,9 @@ const History = ({navigation: { navigate }}) => {
         duration: 3000,
         icon: "auto"
       })
-      navigate("HomeChild");
+    //  navigate("HomeChild");
     }).catch((err) => {
+      setShow(!show)
       setVisibility(!visibility)
       showMessage({
         message: "לא הצלחנו לדחות את הבקשה",
@@ -98,7 +102,7 @@ const History = ({navigation: { navigate }}) => {
   useEffect(() => {
     getLatestRequest();
     getRequestChildName();
-  });
+  },[show]);
 
   return (show &&
     <View style={styles.view}>
