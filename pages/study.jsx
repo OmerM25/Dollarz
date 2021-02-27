@@ -5,7 +5,6 @@ import { CustomText } from "../common/CustomText";
 const Study = () => {
   return (
     <View style={styles.view}>
-
       <CustomText style={styles.headline}> ידע זה כוח </CustomText>
       <CustomText style={{ marginTop: 30 }}>איזה כיף שבאת דני,</CustomText>
       <CustomText style={styles.textStyle}>ללמוד על כסף יכול להיות ממש כיף עם</CustomText>
@@ -13,12 +12,12 @@ const Study = () => {
       <CustomText style={styles.textStyle}> אז למה אתה מחכה? בוא נתחיל לשחק </CustomText>
       <ScrollView >
         <View style={styles.images}>
-          <Image source={require('../assets/images/Books.jpeg')} style={styles.img} />
-          <Image source={require('../assets/images/Price.jpeg')} style={styles.img} />
-          <Image source={require('../assets/images/Trivia.jpeg')} style={styles.img} />
-          <Image source={require('../assets/images/Think.jpeg')} style={styles.img} />
-          <Image source={require('../assets/images/Shopping.jpeg')} style={styles.img} />
-          <Image source={require('../assets/images/Videos.jpeg')} style={styles.img} />
+          <Image source={require('../assets/images/Read.jpg')} style={styles.img} />
+          <Image source={require('../assets/images/GuessThePrice.jpg')} style={styles.img} />
+          <Image source={require('../assets/images/Trivia.jpg')} style={styles.img} />
+          <Image source={require('../assets/images/Memory.jpg')} style={styles.img} />
+          <Image source={require('../assets/images/Shopping.jpg')} style={styles.img} />
+          <Image source={require('../assets/images/Videos.jpg')} style={styles.img} />
         </View>
       </ScrollView>
     </View>
@@ -47,7 +46,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginLeft: 7,
     borderRadius: 10,
-    marginRight: 10
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: 'purple'
   },
   images: {
     flexDirection: 'row',
