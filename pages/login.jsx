@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image, TextInput } from "react-native";
-import { Button } from "../common/Button";
 import { CustomText } from "../common/CustomText";
 import AxiosInstance from "../utils/AxiosInstance";
 import { showMessage } from "react-native-flash-message";
@@ -45,8 +44,9 @@ const Login = ({ navigation: { navigate } }) => {
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
       <TextInput value={password} onChangeText={setPassword} style={styles.input} />
-      <TouchableHighlight onPress={handleLogin} >
-        <CustomText style={styles.loginButton}>התחבר</CustomText></TouchableHighlight>
+      <TouchableHighlight onPress={handleLogin}>
+        <CustomText style={styles.loginButton}>התחבר</CustomText>
+      </TouchableHighlight>
       <TouchableHighlight onPress={() => navigate("Register")}>
         <CustomText style={styles.loginButton}>הורה? הירשם עכשו</CustomText>
       </TouchableHighlight>
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   loginButton: {
-    color: '#3A23CD',
+    color: "#3A23CD",
     marginTop: 40,
     fontSize: 16,
-  }
+  },
 });
