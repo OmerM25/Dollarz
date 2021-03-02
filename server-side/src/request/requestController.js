@@ -18,8 +18,6 @@ router.post("/", function (req, res) {
 
   let parentId;
 
-  //var childId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
-  // there are no childrens yet- so im just cheking
   Child.findById(childId, (err, child) => {
     if (err || !child) {
       res.status(500).send("error");
@@ -54,18 +52,18 @@ router.post("/", function (req, res) {
         });
       });
     });
-    //let parentId= childobj.parent;
-    //let parentId = req.body.//"1212";
   });
 });
 
 // get the latest request
 router.get("/", function (req, res) {
-  // Get sender token
-  //const token = req.headers.authorization.split(" ")[1];
-  // var userId = mongoose.Types.ObjectId(jwt.decode(token).user._id);
+  const token = req.headers.authorization.split(" ")[1];
 
-  Request.findOne({ parentId: "1212", status: "0" }, (err, request) => {
+  // Get sender _id
+  const parentId = jwt.decode(token)._id;
+  const parentTz = jwt.decode(token).id;
+
+  Request.findOne({ parentId: parentTz, status: "0" }, (err, request) => {
     if (err) {
       res.status(500).send("no requests");
     } else {
