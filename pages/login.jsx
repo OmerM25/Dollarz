@@ -4,7 +4,6 @@ import { Button } from "../common/Button";
 import { CustomText } from "../common/CustomText";
 import AxiosInstance from "../utils/AxiosInstance";
 import { showMessage } from "react-native-flash-message";
-import FlashMessage from "react-native-flash-message";
 
 const img = require("../images/LoginPage.png");
 
