@@ -44,7 +44,8 @@ const Login = ({ navigation: { navigate } }) => {
       <CustomText style={styles.inputHeadline}>תעודת זהות</CustomText>
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
-      <TextInput value={password} onChangeText={setPassword} style={styles.input} />
+      <TextInput value={password} onChangeText={setPassword} style={styles.input}
+        secureTextEntry />
       <Button title="התחבר" color={"#3A23CD"} onPress={handleLogin}></Button>
       <Button title="הורה? הירשם עכשו" color={"#3A23CD"} onPress={() => navigate("Register")}></Button>
     </View>
