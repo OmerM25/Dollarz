@@ -5,6 +5,26 @@ var router = express.Router();
 var Goal = require("./goal")
 var Child = require("../child/child")
 
+// Get the last goal
+
+router.get("/", function (req, res) {
+    const token = req.headers.authorization.split(" ")[1];
+    var childId = mongoose.Types.ObjectId(jwt.decode(token)._id);
+    Child.findById(childId, (err, child) => {
+        if (err) {
+            return res.status(500).send("Error getting child");
+        } else {
+            Goal.findById(child.goals[0], (err, goal) => {
+                if (err) {
+                    res.status(500).send("Error getting goal");
+                } else {
+                    return res.status(200).send(goal);
+                }
+            });
+        }
+    });
+  });
+
 // Create a new goal.
 
 router.post("/", (req, res) => {
