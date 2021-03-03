@@ -80,6 +80,9 @@ const Goal = () => {
         </CustomText>
       <CustomText style={styles.value}>
         {remainingAmount.toString()}
+        <CustomText style={styles.moneytype}>
+          ש"ח
+        </CustomText>
       </CustomText>
       <CustomText style={styles.smallHeadline}>
         כדי להגיע ליעד
