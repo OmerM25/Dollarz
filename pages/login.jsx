@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Image, TextInput } from "react-native";
-import { Button } from "../common/Button";
 import { CustomText } from "../common/CustomText";
 import AxiosInstance from "../utils/AxiosInstance";
 import { showMessage } from "react-native-flash-message";
-import FlashMessage from "react-native-flash-message";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 const img = require("../images/LoginPage.png");
 
@@ -44,10 +43,14 @@ const Login = ({ navigation: { navigate } }) => {
       <CustomText style={styles.inputHeadline}>תעודת זהות</CustomText>
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
-      <TextInput value={password} onChangeText={setPassword} style={styles.input}
-        secureTextEntry />
-      <Button title="התחבר" color={"#3A23CD"} onPress={handleLogin}></Button>
-      <Button title="הורה? הירשם עכשו" color={"#3A23CD"} onPress={() => navigate("Register")}></Button>
+      <TextInput value={password} onChangeText={setPassword} style={styles.input} 
+            secureTextEntry/>
+      <TouchableHighlight onPress={handleLogin}>
+        <CustomText style={styles.loginButton}>התחבר</CustomText>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={() => navigate("Register")}>
+        <CustomText style={styles.loginButton}>הורה? הירשם עכשו</CustomText>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -79,5 +82,10 @@ const styles = StyleSheet.create({
   inputHeadline: {
     fontSize: 18,
     marginBottom: 15,
+  },
+  loginButton: {
+    color: "#3A23CD",
+    marginTop: 40,
+    fontSize: 16,
   },
 });
