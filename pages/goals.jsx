@@ -18,7 +18,6 @@ const Goal = () => {
     AxiosInstance.get('goals').then((resp) => {
       setDescription(resp.data.description);
       setAmount(resp.data.amount);
-      console.log(description);
     })
   }
   const getChildMoney = () => {
