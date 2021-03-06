@@ -49,7 +49,7 @@ const Login = ({ navigation: { navigate } }) => {
         <CustomText style={styles.loginButton}>התחבר</CustomText>
       </TouchableHighlight>
       <TouchableHighlight onPress={() => navigate("Register")}>
-        <CustomText style={styles.loginButton}>הורה? הירשם עכשו</CustomText>
+        <CustomText style={styles.loginButton}>הורה? הירשם עכשיו</CustomText>
       </TouchableHighlight>
     </View>
   );
