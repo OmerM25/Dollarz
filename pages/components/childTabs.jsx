@@ -57,7 +57,7 @@ export default function childTabs(props) {
       />
       <Tab.Screen
         name="Study"
-        component={Pages.Study}
+        children={() => <Pages.Study navigation={props.navigation} child={child} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="graduation-cap" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",
