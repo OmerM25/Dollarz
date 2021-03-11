@@ -18,9 +18,9 @@ const Register = ({ navigation: { navigate } }) => {
         message: "כל השדות הם חובה למילוי",
         description: "אנא מלא שדות ריקים",
         type: "error",
-        textAlign: "right",
+        textStyle: { textAlign: "right" },
+        titleStyle: { textAlign: "right" },
       });
-      window.scrollTo(0, 0);
       return;
     } else {
       if (!nameRegex.test(firstName)) {
@@ -28,9 +28,9 @@ const Register = ({ navigation: { navigate } }) => {
           message: "שם פרטי שגוי",
           description: "הכנס  אותיות בלבד",
           type: "error",
-          textAlign: "right",
+          textStyle: { textAlign: "right" },
+          titleStyle: { textAlign: "right" },
         });
-        window.scrollTo(0, 0);
         return;
       }
 
@@ -39,9 +39,9 @@ const Register = ({ navigation: { navigate } }) => {
           message: "שם משפחה שגוי",
           description: "הכנס  אותיות בלבד",
           type: "error",
-          textAlign: "right",
+          textStyle: { textAlign: "right" },
+          titleStyle: { textAlign: "right" },
         });
-        window.scrollTo(0, 0);
         return;
       }
 
@@ -49,9 +49,9 @@ const Register = ({ navigation: { navigate } }) => {
         showMessage({
           message: "תעודת זהות שגויה",
           type: "error",
-          textAlign: "right",
+          textStyle: { textAlign: "right" },
+          titleStyle: { textAlign: "right" },
         });
-        window.scrollTo(0, 0);
         return;
       }
 
@@ -62,9 +62,9 @@ const Register = ({ navigation: { navigate } }) => {
         showMessage({
           message: "סיסמאות אינן תואמות",
           type: "error",
-          textAlign: "right",
+          textStyle: { textAlign: "right" },
+          titleStyle: { textAlign: "right" },
         });
-        window.scrollTo(0, 0);
         return;
       }
     }
@@ -85,9 +85,9 @@ const Register = ({ navigation: { navigate } }) => {
           message: "אירעה שגיאה",
           description: "אנא בדוק את פרטייך ונסה מחדש",
           type: "error",
-          textAlign: "right",
+          textStyle: { textAlign: "right" },
+          titleStyle: { textAlign: "right" },
         });
-        window.scrollTo(0, 0);
         return;
       });
   };
@@ -171,10 +171,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0F0F0",
   },
   header: {
-    flex: 0.73,
+    flex: 0.65,
     alignItems: "center",
-    marginTop: 40,
-    marginBottom: 20,
+    marginTop: 100,
+    marginBottom: 40,
     paddingHorizontal: 10,
   },
   footer: {

@@ -43,8 +43,7 @@ const Login = ({ navigation: { navigate } }) => {
       <CustomText style={styles.inputHeadline}>תעודת זהות</CustomText>
       <TextInput value={id} onChangeText={(id) => setId(id)} style={styles.input} />
       <CustomText style={styles.inputHeadline}>סיסמא</CustomText>
-      <TextInput value={password} onChangeText={setPassword} style={styles.input} 
-            secureTextEntry/>
+      <TextInput value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
       <TouchableHighlight onPress={handleLogin}>
         <CustomText style={styles.loginButton}>התחבר</CustomText>
       </TouchableHighlight>
