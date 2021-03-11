@@ -10,7 +10,7 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <NavContainer />
-      <FlashMessage position="fixed" floating={true} />
+      <FlashMessage position="bottom" floating={true} />
     </View>
   );
 }
