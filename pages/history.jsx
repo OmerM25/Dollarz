@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Image, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet,ScrollView, View, Image, TextInput, TouchableOpacity,SafeAreaView } from "react-native";
 import { CustomText } from "../common/CustomText";
 import AxiosInstance from "../utils/AxiosInstance";
+import MaterialTabs from 'react-native-material-tabs';
+import { DataTable } from 'react-native-paper';
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import axios from 'axios';
@@ -10,6 +12,9 @@ import axios from 'axios';
 const imgApprove = require("../images/approve.png");
 const imgDontApprove = require("../images/dontapprove.png");
 const imgWallet = require("../images/wallet.png");
+const imgsmallApprove = require("../images/smallapprove.png");
+const imgsmallDontApprove = require("../images/smalldontapprove.png");
+const imgHistory = require("../images/history.png");
 
 const History = ({navigation: { navigate }}) => {
   const [visibility, setVisibility] = useState(false);
@@ -103,8 +108,8 @@ const History = ({navigation: { navigate }}) => {
     getLatestRequest();
     getRequestChildName();
   },[show]);
-
-  return (show &&
+  const [selectedTab, setSelectedTab] = useState(3);
+  return (<View>{show? (
     <View style={styles.view}>
       <CustomText style={styles.headline}>
         {childName} מבקש לקבל
@@ -133,6 +138,85 @@ const History = ({navigation: { navigate }}) => {
         source={imgWallet}
         style={styles.imgWallet} />
     </View>
+  ):(
+    //TODO: seperate it to components
+    <View>
+    <View style={{alignItems: "center"}}>
+<CustomText style={styles.historyheadline}>
+         היסטורית הבקשות שלי</CustomText>
+         </View>
+<SafeAreaView style={styles.container}>
+  <MaterialTabs
+    items={['בהמתנה', 'נדחו', 'אושרו', 'הכל']}
+    selectedIndex={selectedTab}
+    onChange={setSelectedTab}
+    barColor="#a89af5"
+    indicatorColor="#4525F2"
+    activeTextColor="black"
+    textStyle={{fontSize: 16,fontFamily: 'VarelaRound'}}
+  />
+</SafeAreaView>
+<ScrollView style={styles.table}>
+<DataTable>
+
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>קניון עם רועי</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>שוקולדים</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallDontApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>קניון עם רועי</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>שוקולדים</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallDontApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>קניון עם רועי</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>שוקולדים</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallDontApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>קניון עם רועי</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallApprove}/></DataTable.Cell>
+</DataTable.Row>
+<DataTable.Row>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
+<DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>שוקולדים</CustomText> </DataTable.Cell>
+<DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
+<DataTable.Cell><Image source={imgsmallDontApprove}/></DataTable.Cell>
+</DataTable.Row>
+</DataTable>
+</ScrollView>
+<Image
+    source={imgHistory}
+    style={styles.imgHistory} />
+</View>
+
+
+  )}
+  </View>
   );
 };
 
@@ -178,4 +262,31 @@ const styles = StyleSheet.create({
     height: 178,
     marginTop: 180,
   },
+  historyheadline: {
+    fontSize: 30,
+       marginTop: 80,
+       color:'#4525F2'
+     },
+     tablevalue: {
+       fontSize: 19,
+       color:'#020000'
+     },
+     container: {
+       marginTop: 20,
+       flex: 1,
+     },
+     table: {
+         height:330,
+       marginTop: 60,
+       marginLeft: 40
+     },
+     date: {
+       alignItems: "center",
+       fontSize: 15
+     },
+     imgHistory: {
+       marginTop: 550,
+       marginLeft:40,
+       position:'absolute'
+     },
 })
