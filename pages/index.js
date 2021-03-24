@@ -6,3 +6,4 @@ export { default as History } from "./history";
 export { default as Login } from "./login";
 export { default as Register } from "./register";
 export { default as AskMoney } from "./askmoney";
+export { default as RegisterChild } from "./registerChild";

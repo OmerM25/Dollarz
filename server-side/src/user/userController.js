@@ -84,7 +84,7 @@ router.post("/registerChild", function (req, res, next) {
     const senderId = jwt.decode(token)._id;
 
     // only parents can register childrens
-    Parent.findOne({ _id: senderId }, (err, parent) => {
+    Parent.findById(senderId, (err, parent) => {
       if (err || parent === undefined) {
         return res.status(401).send("no auth");
       }
@@ -158,11 +158,10 @@ router.get("/_id", (req, res) => {
 });
 
 router.get("/getUserByTz/:tz", (req, res) => {
-  User.findOne({idNumber: req.params.tz}, (err, user) => {
+  User.findOne({ idNumber: req.params.tz }, (err, user) => {
     if (err || !user) {
       res.status(500).send("error");
-    }
-    else {
+    } else {
       res.status(200).send(user);
     }
   });
