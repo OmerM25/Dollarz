@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, ListView } from "react-nativ
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { CustomText } from "../common/CustomText";
 
-const Study = ({navigation: { navigate }}, ...props) => {
+const Study = ({navigation: { navigate }, ...props}) => {
   if (!props.child) {
     return <></>;
   }

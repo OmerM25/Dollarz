@@ -7,7 +7,7 @@ var router = express.Router();
 const fs = require('fs');
 
 // Get american questions game
-router.get("/americanquestions", function (req, res) {
+router.get("/quiz", function (req, res) {
     try {
         let rawQuestions = fs.readFileSync('american_questions_game.json', 'utf-8');
         let questions = JSON.parse(rawQuestions)
