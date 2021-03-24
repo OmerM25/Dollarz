@@ -20,6 +20,7 @@ const NavContainer = () => {
         <Stack.Screen name="Login" component={Pages.Login} />
         <Stack.Screen name="Register" component={Pages.Register} />
         <Stack.Screen name="AskMoney" component={Pages.AskMoney} />
+        <Stack.Screen name="Quiz" component={Pages.Quiz} />
       </Stack.Navigator>
     </NavigationContainer>
   );
