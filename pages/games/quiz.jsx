@@ -55,7 +55,7 @@ const Quiz = ({ navigation: { navigate } }) => {
 
     const mappedAnswers = questions[currQuestion]?.answers.map((answer, index) => {
         return (
-            <CheckBox
+            <CheckBox style={{textAlign: "center", width: "100%"}}
                 center
                 key={index}
                 title={answer}
@@ -69,13 +69,14 @@ const Quiz = ({ navigation: { navigate } }) => {
     });
 
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center" }} center>
             <FlashMessage />
-            <CustomText>{questions[currQuestion]?.question}</CustomText>
-            <View>
+            <CustomText style={{margin: 30, fontSize: 30, fontWeight: "bold"}}>משחק טריוויה</CustomText>
+            <CustomText style={{margin: 5, fontSize: 20, fontWeight: "bold"}}>{questions[currQuestion]?.question}</CustomText>
+            <View style={{marginTop: 80, justifyContent: "center", alignItems: "center", width: "100%"}} center>
                 {mappedAnswers}
             </View>
-            { correctAnswer && <Button title="שאלה הבאה" onPress={() => nextQuestion() }></Button> }
+            { correctAnswer && <Button title="שאלה הבאה" color="#6C63FC" onPress={() => nextQuestion() }></Button> }
         </View>
     );
 };
