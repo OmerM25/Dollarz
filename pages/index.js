@@ -7,4 +7,5 @@ export { default as childHistory } from "./childHistory";
 export { default as Login } from "./login";
 export { default as Register } from "./register";
 export { default as AskMoney } from "./askmoney";
+export { default as Quiz } from "./games/quiz";
 export { default as RegisterChild } from "./registerChild";
