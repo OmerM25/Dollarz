@@ -59,16 +59,20 @@ router.post("/", function (req, res) {
   }
 });
 
+// Add/sub money for a specific child
 router.put("/updatemoney/:id", (req, res) => {
-  User.findOne({idNumber: req.params.id}, (err, user) => {
-        if (err || !user) {
-          res.status(500).send("error");
-        }
-  Child.findOneAndUpdate({userDetails: user._id}, {$inc:req.body} , function(err, result) {
+  User.findOne({ idNumber: req.params.id }, (err, user) => {
+    if (err || !user) {
+      res.status(500).send("error");
+    }
+    Child.findOneAndUpdate({ userDetails: user._id }, { $inc: req.body }, function (err, result) {
       // Check for erros
-      if (err) { res.send(err) }
-      else { res.send(result) }
-   });
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    });
   });
 });
 
