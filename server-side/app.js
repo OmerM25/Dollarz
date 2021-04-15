@@ -13,6 +13,7 @@ const chores = require("./src/chore/choreController").default;
 const user = require("./src/user/userController").default;
 const request = require("./src/request/requestController").default;
 const child = require("./src/child/childController").default;
+const parent = require("./src/parent/parentController").default;
 
 app.use(cors());
 
@@ -29,6 +30,7 @@ app.use("/child", child);
 app.use("/request", request);
 app.use("/chore", chores);
 app.use("/user", user);
+app.use("/parent", parent);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {
