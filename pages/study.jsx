@@ -1,10 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView, ListView } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { CustomText } from "../common/CustomText";
 
-const Study = (props) => {
+const Study = ({navigation: { navigate }, ...props}) => {
   if (!props.child) {
     return <></>;
+  }
+
+  const navigateQuiz = function() {
+    navigate("Quiz");
   }
 
   return (
@@ -18,7 +23,9 @@ const Study = (props) => {
         <View style={styles.images}>
           <Image source={require('../assets/images/Read.jpg')} style={styles.img} />
           <Image source={require('../assets/images/GuessThePrice.jpg')} style={styles.img} />
-          <Image source={require('../assets/images/Trivia.jpg')} style={styles.img} />
+          <TouchableOpacity onPress={navigateQuiz}>
+            <Image source={require('../assets/images/Quiz.jpg')} style={styles.img} />
+          </TouchableOpacity>
           <Image source={require('../assets/images/Memory.jpg')} style={styles.img} />
           <Image source={require('../assets/images/Shopping.jpg')} style={styles.img} />
           <Image source={require('../assets/images/Videos.jpg')} style={styles.img} />

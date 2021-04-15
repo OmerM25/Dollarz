@@ -47,8 +47,8 @@ export default function childTabs(props) {
         }}
       />
       <Tab.Screen
-        name="History"
-        component={Pages.History}
+        name="childHistory"
+        component={Pages.childHistory}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="history" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 
 export const CustomText = ({ children, style }) => {
@@ -12,6 +12,12 @@ export const CustomText = ({ children, style }) => {
     }
 
     return (
-        <Text style={{ ...style, fontFamily: 'VarelaRound' }}>{children}</Text>
+        <Text style={[style, styles.main]}>{children}</Text>
     )
 }
+
+const styles = StyleSheet.create({
+    main: {
+        fontFamily: 'VarelaRound'
+    }
+});
