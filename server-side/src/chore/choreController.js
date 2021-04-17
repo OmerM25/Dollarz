@@ -49,8 +49,9 @@ router.put("/:id", (req, res) => {
 });
 
 // Delete
-router.delete("/:id", (req, res) => {
-    Chore.findByIdAndDelete(req.params.id, (err, result) => {
+router.delete("/", (req, res) => {
+    let id = new mongoose.Types.ObjectId(req.query.id);
+    Chore.findByIdAndDelete(id, (err, result) => {
         if (err) { res.send(err) }
         else { res.send(result) }
     });

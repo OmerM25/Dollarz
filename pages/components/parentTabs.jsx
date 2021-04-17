@@ -29,8 +29,8 @@ export default function parentTabs(props) {
         }}
       />
       <Tab.Screen
-        name="HomeChild"
-        component={Pages.HomeChild}
+        name="HomeParent"
+        children={() => <Pages.HomeParent navigation={props.navigation} parent={parent} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="home" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",

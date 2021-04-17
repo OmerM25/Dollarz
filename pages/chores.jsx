@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { Image, Modal, StyleSheet, TextInput, View, FlatList, ScrollView } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
+import { DataTable } from 'react-native-paper';
 
 const Chores = (props) => {
   if (!props.parent && !props.child) {
@@ -31,7 +32,7 @@ const Chores = (props) => {
       amount: amount,
       parentId: props.parent._id
     }).then((chore) => {
-      setVisibility(!visibility)
+      setVisibility(!visibility);
       showMessage({
         message: "המטלה נשמרה בהצלחה!",
         type: "success",
@@ -39,8 +40,11 @@ const Chores = (props) => {
         duration: 3000,
         icon: "auto"
       });
+      setDescription("");
+      setAmount("");
+      getChores();
     }).catch((err) => {
-      setVisibility(!visibility)
+      setVisibility(!visibility);
       showMessage({
         message: "לא הצלחנו לשמור את המטלה",
         description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
@@ -50,6 +54,32 @@ const Chores = (props) => {
         icon: "auto",
       });
     })
+  }
+
+  const deleteChore = (choreId) => {
+    AxiosInstance.delete('chore', {
+      params: {
+        id: choreId
+      }
+    }).then(() => {
+      showMessage({
+        message: "המטלה נמחקה בהצלחה!",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      });
+      getChores();
+    }).catch((err) => {
+      showMessage({
+        message: "לא הצלחנו למחוק את המטלה",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    });
   }
 
   let isRendered = useRef(false);
@@ -69,8 +99,11 @@ const Chores = (props) => {
       <FlatList
         data={chores}
         renderItem={({ item }) => {
-          return <View style={{flexDirection: "row"}}>
-            <View>
+          return <View style={{ flexDirection: "row" }}>
+            <View style={{ margin: 15 }}>
+              <Button onPress={() => deleteChore(item._id)} title="X" color="#FF0000" />
+            </View>
+            <View style={{ margin: 15 }}>
               <CustomText style={styles.money}>
                 {item.amount}
                 <CustomText style={styles.moneytype}>
@@ -78,7 +111,7 @@ const Chores = (props) => {
       </CustomText>
               </CustomText>
             </View>
-            <View>
+            <View style={{ margin: 15 }}>
               <CustomText style={styles.smallHeadline}>
                 {item.description}
               </CustomText>
@@ -91,6 +124,9 @@ const Chores = (props) => {
         <View style={styles.modalButton}>
           <Button onPress={() => { setVisibility(!visibility) }} title="הוספת מטלה חדשה" />
         </View>
+      </View>
+      <View style={styles.header}>
+        <Image style={{ width: 200, height: 200 }} source={require("../assets/images/chores.png")} />
       </View>
 
       <Modal
@@ -192,13 +228,13 @@ const styles = StyleSheet.create({
   },
   money: {
     alignItems: "center",
-    fontSize: 30,
+    fontSize: 20,
     marginTop: 10
   },
   moneytype: {
     alignItems: "center",
-    fontSize: 18,
-    marginRight: 5
+    fontSize: 10,
+    marginRight: 155
   },
   imgPresent: {
     width: 200,
