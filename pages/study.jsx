@@ -12,6 +12,10 @@ const Study = ({navigation: { navigate }, ...props}) => {
     navigate("Quiz");
   }
 
+  const navigateSliderGame = function() {
+    navigate("SliderGame");
+  }
+
   return (
     <View style={styles.view}>
       <CustomText style={styles.headline}> ידע זה כוח </CustomText>
@@ -22,7 +26,9 @@ const Study = ({navigation: { navigate }, ...props}) => {
       <ScrollView >
         <View style={styles.images}>
           <Image source={require('../assets/images/Read.jpg')} style={styles.img} />
-          <Image source={require('../assets/images/GuessThePrice.jpg')} style={styles.img} />
+          <TouchableOpacity onPress={navigateSliderGame}>
+            <Image source={require('../assets/images/GuessThePrice.jpg')} style={styles.img} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={navigateQuiz}>
             <Image source={require('../assets/images/Quiz.jpg')} style={styles.img} />
           </TouchableOpacity>
