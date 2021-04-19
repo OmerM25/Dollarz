@@ -26,6 +26,20 @@ const Chores = (props) => {
     });
   }
 
+  const updateChores = () => {
+    AxiosInstance.get("/user/_id").then((res) => {
+      AxiosInstance.post("/parent", { parentId: res.data.toString() }).then((res) => {
+        AxiosInstance.get('chore', {
+          params: {
+            chores: res.data.chores
+          }
+        }).then(resp => {
+          setChores(resp.data);
+        });
+      });
+    });
+  }
+
   const saveNewChore = () => {
     AxiosInstance.post('chore', {
       description: description,
@@ -42,7 +56,7 @@ const Chores = (props) => {
       });
       setDescription("");
       setAmount("");
-      getChores();
+      updateChores();
     }).catch((err) => {
       setVisibility(!visibility);
       showMessage({
@@ -69,7 +83,7 @@ const Chores = (props) => {
         duration: 3000,
         icon: "auto"
       });
-      getChores();
+      updateChores();
     }).catch((err) => {
       showMessage({
         message: "לא הצלחנו למחוק את המטלה",
