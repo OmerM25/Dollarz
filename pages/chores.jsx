@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList, ScrollView } from "react-native";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
-import { DataTable } from 'react-native-paper';
 
 const Chores = (props) => {
   if (!props.parent && !props.child) {
