@@ -26,7 +26,6 @@ router.post('/', function (req, res) {
     });
 
     var parentId = mongoose.Types.ObjectId(req.body.parentId);
-    console.log(req.body);
 
     chore.save().then(chore => {
         Parent.findByIdAndUpdate(parentId,
