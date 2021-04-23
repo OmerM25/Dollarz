@@ -1,6 +1,7 @@
 var express = require("express");
 var jwt = require("jsonwebtoken");
 var mongoose = require("mongoose");
+var async = require("async");
 
 var router = express.Router();
 var Child = require("./child");
@@ -59,13 +60,59 @@ router.post("/", function (req, res) {
   }
 });
 
+router.get("/", function (req, res) {
+  // Get sender token
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const sender = jwt.decode(token)._id;
+
+  let ids = req.query.children.map(child => new mongoose.Types.ObjectId(child));
+  let children = [];
+
+  async.each(ids, function(currChildId, callback) {
+    Parent.findById(sender, (err, parent) => {
+      if (err || !parent) {
+        return res.status(500).send("no authorization");
+      }
+
+      // Check if the parent asks info for his own child
+      if (parent.children.find((child) => child.equals(currChildId))) {
+        Child.findById(currChildId.toString(), (err, child) => {
+          if (!child || err) {
+            res.status(500).send("no authorization");
+          } else {
+            User.findById(child.userDetails, (err, user) => {
+              if (err || !user) {
+                res.status(500).send("user doesnt exist");
+              } else {
+                children.push({child, user});
+                callback();
+              }
+            });
+          }
+        });
+      } else {
+        res.status(500).send("no authorization");
+      }
+    });
+  }, function (err) {
+    if (err) {
+      res.status(500).send("There was an error getting the children");
+    } else {
+      res.status(200).send(children);
+    }
+  });
+});
+
 // Add/sub money for a specific child
 router.put("/updatemoney/:id", (req, res) => {
   User.findOne({ idNumber: req.params.id }, (err, user) => {
     if (err || !user) {
       res.status(500).send("error");
     }
-    Child.findOneAndUpdate({ userDetails: user._id }, { $inc: req.body }, function (err, result) {
+    Child.findOneAndUpdate({ userDetails: user._id }, { $inc: req.body },
+      { new: true, useFindAndModify: false }, function (err, result) {
       // Check for erros
       if (err) {
         res.send(err);

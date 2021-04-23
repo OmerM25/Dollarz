@@ -5,6 +5,8 @@ import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
 import { DataTable } from 'react-native-paper';
+const imageParents = require("../assets/images/parents.png");
+import axios from 'axios';
 
 const HomeParent = (props) => {
     if (!props.parent) {
@@ -12,15 +14,107 @@ const HomeParent = (props) => {
     }
 
     const [children, setChildren] = useState([]);
+    const [addMode, setAddMode] = useState(false);
+    const [reduceMode, setReduceMode] = useState(false);
+    const [amountToChange, setAmountToChange] = useState(0);
+    const [childrenToChange, setChildrenToChange] = useState([]);
 
     const getChildren = () => {
         props.parent.children.forEach(child => {
-            AxiosInstance.post('child', { childId: child }).then(resp => {
-                let currChildren = children;
-                children.push(resp.data);
-                setChildren(currChildren);
-            })
+            AxiosInstance.get('child', {
+                params: {
+                    children: props.parent.children
+                }
+            }).then(resp => {
+                setChildren(resp.data);
+            });
         });
+    }
+
+    const chooseToAdd = (child) => {
+        setChildrenToChange([]);
+        if (child) {
+            childrenToChange.push(child);
+        } else {
+            setChildrenToChange(children);
+        }
+        setAddMode(true);
+    }
+
+    const chooseToReduce = (child) => {
+        setChildrenToChange([]);
+        if (child) {
+            childrenToChange.push(child);
+        } else {
+            setChildrenToChange(children);
+        }
+        setReduceMode(true);
+    }
+
+    const addMoney = () => {
+        let promises = [];
+        childrenToChange.forEach(child => {
+            promises.push(AxiosInstance.put('child/updatemoney/' + child.user.idNumber, { money: amountToChange }));
+        })
+        axios.all(promises)
+            .then((resp) => {
+                setAddMode(false);
+                showMessage({
+                    message: "הכסף נוסף בהצלחה",
+                    type: "success",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto"
+                });
+                setAmountToChange(0);
+                setChildrenToChange([]);
+                getChildren();
+            }).catch((err) => {
+                setAddMode(false)
+                showMessage({
+                    message: "לא הצלחנו להוסיף את הכסף",
+                    description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+                    type: "danger",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto",
+                });
+                setAmountToChange(0);
+                setChildrenToChange([]);
+            })
+    }
+
+    const reduceMoney = () => {
+        let promises = [];
+        childrenToChange.forEach(child => {
+            promises.push(AxiosInstance.put('child/updatemoney/' + child.user.idNumber, { money: amountToChange * -1 }));
+        })
+        axios.all(promises)
+            .then((resp) => {
+                setReduceMode(false);
+                showMessage({
+                    message: "הכסף ירד בהצלחה",
+                    type: "success",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto"
+                });
+                setAmountToChange(0);
+                setChildrenToChange([]);
+                getChildren();
+            }).catch((err) => {
+                setReduceMode(false)
+                showMessage({
+                    message: "לא הצלחנו להוריד את הכסף",
+                    description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+                    type: "danger",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto",
+                });
+                setAmountToChange(0);
+                setChildrenToChange([]);
+            })
     }
 
     useEffect(() => {
@@ -32,28 +126,105 @@ const HomeParent = (props) => {
             <CustomText style={styles.headline}>מצב הילדים שלי</CustomText>
             <View style={{ flexDirection: "row" }}>
                 <View style={styles.modalButton}>
-                    <Button onPress={() => { }} title="הורד לכולם" />
+                    <Button onPress={() => { chooseToReduce() }} title="הורד לכולם" />
                 </View>
                 <View style={styles.modalButton}>
-                    <Button onPress={() => { }} title="הוסף לכולם" />
+                    <Button onPress={() => { chooseToAdd() }} title="הוסף לכולם" />
                 </View>
             </View>
-            <DataTable>
-                {children.map((child, index) => {
-                    return (
-                        <DataTable.Row>
-                            <DataTable.Cell style={{ flex: 2 }}><CustomText>{child.user.name}</CustomText></DataTable.Cell>
-                            <DataTable.Cell style={{ flex: 2 }}><CustomText>{child.child.money}</CustomText></DataTable.Cell>
-                        </DataTable.Row>
-                    );
-                })}
-            </DataTable>
+            <FlatList
+                data={children}
+                renderItem={({ item }) => {
+                    return <View style={{ flexDirection: "row" }}>
+                        <View style={styles.plusButtonView}>
+                            <Button style={styles.plusButton} onPress={(item) => { chooseToReduce(item.child) }} title="-" />
+                        </View>
+                        <View style={styles.plusButtonView}>
+                            <Button onPress={(item) => { chooseToAdd(item.child) }} title="+" />
+                        </View>
+                        <View style={{ margin: 15 }}>
+                            <CustomText style={styles.money}>
+                                {item.child.money}
+                                <CustomText style={styles.moneytype}>
+                                    ש"ח
+                                    </CustomText>
+                            </CustomText>
+                        </View>
+                        <View style={{ margin: 15 }}>
+                            <CustomText style={styles.smallHeadline}>
+                                {item.user.name}
+                            </CustomText>
+                        </View>
+                    </View>
+                }}
+                keyExtractor={child => child.user._id}
+            />
             <View style={styles.modalButton}>
                 <Button onPress={() => {
                     props.navigation.navigate("RegisterChild");
                 }} title="הוספת ילד" />
             </View>
+            <View>
+                <Image source={imageParents} style={styles.imgParents} />
+            </View>
+            <Modal
+                transparent={true}
+                animationType={"slide"}
+                visible={addMode}
+                onRequestClose={() => { setAddMode(false) }}
+                onBackdropPress={() => { setAddMode(false) }}>
 
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.ModalInsideView}>
+                        <CustomText
+                            style={styles.inputHeadline}>
+                            כמה כסף להוסיף?
+            </CustomText>
+                        <TextInput
+                            value={amountToChange.toString()}
+                            onChangeText={setAmountToChange}
+                            style={styles.input} />
+                        <CustomText>ש"ח</CustomText>
+                        <View style={{ flexDirection: "row" }}>
+                            <View style={styles.modalButton}>
+                                <Button color="#6C63FC" title="הוספה" onPress={addMoney} />
+                            </View>
+                            <View style={styles.modalButton}>
+                                <Button color="#6C63FC" title="ביטול" onPress={() => { setAddMode(false) }} />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                transparent={true}
+                animationType={"slide"}
+                visible={reduceMode}
+                onRequestClose={() => { setReduceMode(false) }}
+                onBackdropPress={() => { setReduceMode(false) }}>
+
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.ModalInsideView}>
+                        <CustomText
+                            style={styles.inputHeadline}>
+                            כמה כסף להוריד?
+                            </CustomText>
+                        <TextInput
+                            value={amountToChange.toString()}
+                            onChangeText={setAmountToChange}
+                            style={styles.input} />
+                        <CustomText>ש"ח</CustomText>
+                        <View style={{ flexDirection: "row" }}>
+                            <View style={styles.modalButton}>
+                                <Button color="#6C63FC" title="הורדה" onPress={reduceMoney} />
+                            </View>
+                            <View style={styles.modalButton}>
+                                <Button color="#6C63FC" title="ביטול" onPress={() => { setReduceMode(false) }} />
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -102,6 +273,15 @@ const styles = StyleSheet.create({
         margin: 16,
         width: 100,
     },
+    plusButtonView: {
+        margin: 13,
+        marginTop: 25,
+        width: 30,
+        borderRadius: 40
+    },
+    plusButton: {
+        borderRadius: 20
+    },
     headline: {
         fontSize: 30,
         marginTop: 15,
@@ -149,5 +329,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 17,
         textAlign: "center"
+    },
+    imgParents: {
+        width: 230,
+        height: 200,
+        marginBottom: 30,
+        marginTop: 20
     }
 });

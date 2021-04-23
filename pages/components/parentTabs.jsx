@@ -18,7 +18,7 @@ export default function parentTabs(props) {
   }, []);
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="HomeParent">
       <Tab.Screen
         name="Chores"
         children={() => <Pages.Chores navigation={props.navigation} parent={parent} />}

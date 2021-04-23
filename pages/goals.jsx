@@ -42,6 +42,7 @@ const Goal = () => {
         duration: 3000,
         icon: "auto"
       });
+      getLatestGoal();
     }).catch((err) => {
       setVisibility(!visibility)
       showMessage({
@@ -67,7 +68,7 @@ const Goal = () => {
         {description}
       </CustomText>
       <CustomText style={styles.money}>
-        {amount.toString()}
+        {amount ? amount.toString() : amount}
         <CustomText style={styles.moneytype}>
           ש"ח
         </CustomText>
@@ -132,7 +133,7 @@ const Goal = () => {
               כמה זה עולה?
             </CustomText>
             <TextInput
-              value={amount}
+              value={amount.toString()}
               onChangeText={setAmount}
               style={styles.input} />
             <View style={{ flexDirection: "row" }}>
