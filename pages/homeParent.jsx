@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { Image, Modal, StyleSheet, TextInput, View, FlatList, Text } from "react-native";
 import { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
@@ -150,9 +150,11 @@ const HomeParent = (props) => {
                             </CustomText>
                         </View>
                         <View style={{ margin: 15 }}>
-                            <CustomText style={styles.smallHeadline}>
+                            <Text style={styles.smallHeadline} onPress={() => {
+                            props.navigation.navigate("ChildView", {child: item.user._id, parent: props.parent});
+                        }}>
                                 {item.user.name}
-                            </CustomText>
+                            </Text>
                         </View>
                     </View>
                 }}
