@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, Modal, StyleSheet, TextInput } from "react-native";
+import DropDownPicker from 'react-native-dropdown-picker';
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 
@@ -27,6 +28,8 @@ const calcDaysLeftToAllowance = (props) => {
 const HomeChild = (props) => {
   const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
   const [money, setMoney] = useState();
+  const [selectedDay, setSelectedDay] = useState("ראשון");
+  const [frequency, setFrequency] = useState("יום");
   if (!props.child) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -49,10 +52,37 @@ const HomeChild = (props) => {
                   value={money}
                   onChangeText={(money) => setMoney(money)}
                 />
-                <CustomText style={{
-                  position: 'relative',
-                  bottom: 120
-                }}>ש"ח</CustomText>
+                <CustomText style={{ position: 'relative', bottom: 20 }}>ש"ח</CustomText>
+              </View>
+              <View style={{ flexDirection: "row", zIndex: 10 }}>
+                <DropDownPicker
+                  defaultValue={selectedDay}
+                  itemStyle={{ justifyContent: 'flex-start' }}
+                  containerStyle={{ height: 40, width: 120, marginRight: 20 }}
+                  style={{ backgroundColor: '#fafafa' }}
+                  dropDownStyle={{ backgroundColor: '#fafafa' }}
+                  items={[{ label: 'ראשון', value: "ראשון", selected: true },
+                  { label: 'שני', value: "שני" },
+                  { label: 'שלישי', value: "שלישי" },
+                  { label: 'רביעי', value: "רביעי" },
+                  { label: 'חמישי', value: "חמישי" },
+                  { label: 'שישי', value: "שישי" },
+                  { label: 'שבת', value: "שבת" }]}
+                  onChangeItem={item => setSelectedDay(item)} />
+                <CustomText>בימי</CustomText>
+              </View>
+              <View style={{ flexDirection: "row", zIndex: 9 }}>
+                <DropDownPicker
+                  defaultValue={frequency}
+                  itemStyle={{ justifyContent: 'flex-start' }}
+                  style={{ backgroundColor: '#fafafa' }}
+                  dropDownStyle={{ backgroundColor: '#fafafa' }}
+                  containerStyle={{ height: 40, width: 120, marginRight: 20, marginTop: 10 }}
+                  items={[{ label: 'יום', value: "יום", selected: true },
+                  { label: 'שבוע', value: "שבוע" },
+                  { label: 'חודש', value: "חודש" }]}
+                  onChangeItem={item => setFrequency(item)} />
+                <CustomText style={{ marginTop: 10 }}> בכל</CustomText>
               </View>
               <View style={{ flexDirection: "row" }}>
                 <View style={styles.modalButton}>
@@ -138,23 +168,25 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   headline: {
-    marginBottom: 170,
+    marginBottom: 50,
     fontSize: 30,
     color: "#3A23CD"
   },
   input: {
-    textAlign: "right",
+    textAlign: "center",
     borderBottomWidth: 1.0,
     width: 200,
     fontSize: 17,
     position: 'relative',
-    bottom: 120
+    bottom: 20
   },
   moneyInput: {
     flexDirection: 'row'
   },
   modalButton: {
-    margin: 16,
     width: 100,
+    marginTop: 30,
+    marginLeft: 16,
+    marginRight: 16
   },
 })
