@@ -73,6 +73,29 @@ router.get("/", function (req, res) {
   });
 });
 
+
+// get all the requests of a parent
+router.get("/allbyparent", function (req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const parentId = jwt.decode(token)._id;
+  const parentTz = jwt.decode(token).id;
+
+  Request.find({ parentId: parentTz}, (err, request) => {
+    if (err) {
+      res.status(500).send("no requests");
+    } else {
+      console.log("requests - ", request);
+      res.status(200).send(request);
+    }
+  });
+});
+
+
+
+
+
 router.put("/approve/:id", (req, res) => {
   Request.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
     // Check for erros
