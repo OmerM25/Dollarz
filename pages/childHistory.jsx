@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet,ScrollView, View, Image, TextInput, TouchableOpacity,SafeAreaView} from "react-native";
+import { StyleSheet,ScrollView, View, Image, TextInput, TouchableOpacity,SafeAreaView,FlatList} from "react-native";
 import { CustomText } from "../common/CustomText";
 import MaterialTabs from 'react-native-material-tabs';
 import { DataTable } from 'react-native-paper';
 import AxiosInstance from "../utils/AxiosInstance";
+import Moment from 'moment';
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import axios from 'axios';
@@ -14,6 +15,17 @@ const imgHistory = require("../images/history.png");
 
 const childHistory = ({navigation: { navigate }}) => {
     const [selectedTab, setSelectedTab] = useState(3);
+    const [history, setHistory] = useState("");
+    const getRequestHistory = () => {
+      AxiosInstance.get('request/allbychild').then((resp) => {
+        setHistory(resp.data);
+      }).catch((err) => {
+        
+      })
+    }
+    useEffect(() => {
+      getRequestHistory();
+    });
   return (
     <View>
         <View style={styles.view}>
@@ -34,54 +46,19 @@ const childHistory = ({navigation: { navigate }}) => {
     <ScrollView style={styles.table}>
     <DataTable>
 
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>קניון עם רועי</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>שוקולדים</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgDontApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>קניון עם רועי</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>שוקולדים</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgDontApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>קניון עם רועי</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>שוקולדים</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgDontApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>קניון עם רועי</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>10.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgApprove}/></DataTable.Cell>
-    </DataTable.Row>
-    <DataTable.Row>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>40 ש"ח</CustomText></DataTable.Cell>
-    <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.value}>שוקולדים</CustomText> </DataTable.Cell>
-    <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>14.12.21</CustomText></DataTable.Cell> 
-    <DataTable.Cell><Image source={imgDontApprove}/></DataTable.Cell>
-    </DataTable.Row>
+    <FlatList
+        data={history}
+        renderItem={({ item }) => {
+          return <DataTable.Row>
+          <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>{item.amount}</CustomText></DataTable.Cell>
+          <DataTable.Cell style={{flex: 3}}> <CustomText style={styles.tablevalue}>{item.reason}</CustomText> </DataTable.Cell>
+          <DataTable.Cell style={{flex: 2}}><CustomText style={styles.date}>{Moment(item.dateRequested).format("DD/MM/YY")}</CustomText></DataTable.Cell> 
+          <DataTable.Cell><Image source={item.status==1 ? imgApprove : imgDontApprove}/></DataTable.Cell>
+          </DataTable.Row>
+        }}
+        keyExtractor={historyitem => historyitem._id}
+      />
+  
   </DataTable>
   </ScrollView>
   <Image

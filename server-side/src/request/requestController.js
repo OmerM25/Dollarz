@@ -93,6 +93,23 @@ router.get("/allbyparent", function (req, res) {
 });
 
 
+// get all the requests of a child
+router.get("/allbychild", function (req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const childId = jwt.decode(token)._id;
+  const childTz = jwt.decode(token).id;
+
+  Request.find({ childId: childTz}, (err, request) => {
+    if (err) {
+      res.status(500).send("no requests");
+    } else {
+      console.log("requests - ", request);
+      res.status(200).send(request);
+    }
+  });
+});
 
 
 
