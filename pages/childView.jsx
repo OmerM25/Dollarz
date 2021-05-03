@@ -1,18 +1,74 @@
 import React, { useEffect, useState } from "react";
 import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
-import { showMessage } from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
-const imageParents = require("../assets/images/parents.png");
+const imgGoal = require("../assets/images/Ellipse 44.png");
 import axios from 'axios';
 
 const ChildView = (props) => {
     if (!props.route.params.parent) {
         return <></>;
     }
+    let child = props.route.params.child;
+    console.log(child);
 
-    return <View><CustomText>{props.route.params.child}</CustomText></View>
+    const [goalDescription, setGoalDescription] = useState("");
+    const [goalAmount, setGoalAmount] = useState("");
+
+    const getLatestGoal = () => {
+        console.log(child.user._id);
+        AxiosInstance.get('goals/byChild', {
+            params: {
+                childId: child.user._id
+            }
+        }).then((resp) => {
+            setGoalDescription(resp.data.description);
+            setGoalAmount(resp.data.amount);
+        })
+    }
+
+    useEffect(() => {
+        getLatestGoal();
+    }, []);
+
+    return (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <FlashMessage />
+            <CustomText style={styles.headline}>
+                החיסכון של {child.user.name}
+            </CustomText>
+            <CustomText style={styles.money}>
+                {child.child.money}
+                <CustomText style={styles.moneytype}>
+                    ש"ח
+            </CustomText>
+            </CustomText>
+            <Image source={imgGoal}></Image>
+            <CustomText style={styles.minorHeadline}>
+                {goalDescription ? goalDescription : "לא הוגדרה מטרה"}
+            </CustomText>
+            <CustomText style={styles.value}>
+                <CustomText style={styles.moneytype}>
+                    {goalAmount ? goalAmount + 'ש"ח' : null}
+                </CustomText>
+            </CustomText>
+            <CustomText style={styles.smallHeadline}>
+                דמי כיס
+            </CustomText>
+            <CustomText>
+                {child.child.allowance.amount ? child.child.allowance.amount + 'ש"ח' : "אין"}
+            </CustomText>
+            <View style={styles.modalButton}>
+                <Button onPress={() => {
+                }} title="עדכון דמי כיס" />
+            </View>
+            <CustomText style={styles.smallHeadline}>
+                גרף התקדמות
+            </CustomText>
+        </View>
+    );
 }
 
 export default ChildView;
@@ -99,6 +155,12 @@ const styles = StyleSheet.create({
         borderColor: '#4525F2'
     },
     smallHeadline: {
+        fontSize: 20,
+        marginTop: 15,
+        color: '#4525F2',
+        fontWeight: "bold"
+    },
+    minorHeadline: {
         fontSize: 20,
         marginTop: 15,
         color: '#4525F2'
