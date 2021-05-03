@@ -6,8 +6,16 @@ import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
 const imgGoal = require("../assets/images/Ellipse 44.png");
 import axios from 'axios';
+import DropDownPicker from 'react-native-dropdown-picker';
+
+const imageParents = require("../assets/images/parents.png");
 
 const ChildView = (props) => {
+    const [money, setMoney] = useState();
+    const [selectedDay, setSelectedDay] = useState("ראשון");
+    const [frequency, setFrequency] = useState("יום");
+    const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
+
     if (!props.route.params.parent) {
         return <></>;
     }
@@ -61,24 +69,81 @@ const ChildView = (props) => {
                 {child.child.allowance.amount ? child.child.allowance.amount + 'ש"ח' : "אין"}
             </CustomText>
             <View style={styles.modalButton}>
-                <Button onPress={() => {
-                }} title="עדכון דמי כיס" />
+            <Button onPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }} title="עדכן דמי כיס" />
             </View>
             <CustomText style={styles.smallHeadline}>
                 גרף התקדמות
             </CustomText>
+            <Modal
+            transparent={true}
+            animationType={"slide"}
+            visible={shouldOpenMoneyDialog}
+            onRequestClose={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }}
+            onBackdropPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.ModalInsideView}>
+                    <CustomText style={styles.headline}>סכום דמי הכיס</CustomText>
+                    <View styles={styles.moneyInput}>
+                        <TextInput
+                            keyboardType="numeric"
+                            style={styles.input}
+                            value={money}
+                            onChangeText={(money) => setMoney(money)}
+                        />
+                        <CustomText style={{ position: 'relative', bottom: 20 }}>ש"ח</CustomText>
+                    </View>
+                    <View style={{ flexDirection: "row", zIndex: 10 }}>
+                        <DropDownPicker
+                            defaultValue={selectedDay}
+                            itemStyle={{ justifyContent: 'flex-start' }}
+                            containerStyle={{ height: 40, width: 120, marginRight: 20 }}
+                            style={{ backgroundColor: '#fafafa' }}
+                            dropDownStyle={{ backgroundColor: '#fafafa' }}
+                            items={[{ label: 'ראשון', value: "ראשון", selected: true },
+                            { label: 'שני', value: "שני" },
+                            { label: 'שלישי', value: "שלישי" },
+                            { label: 'רביעי', value: "רביעי" },
+                            { label: 'חמישי', value: "חמישי" },
+                            { label: 'שישי', value: "שישי" },
+                            { label: 'שבת', value: "שבת" }]}
+                            onChangeItem={item => setSelectedDay(item)} />
+                        <CustomText>בימי</CustomText>
+                    </View>
+                    <View style={{ flexDirection: "row", zIndex: 9 }}>
+                        <DropDownPicker
+                            defaultValue={frequency}
+                            itemStyle={{ justifyContent: 'flex-start' }}
+                            style={{ backgroundColor: '#fafafa' }}
+                            dropDownStyle={{ backgroundColor: '#fafafa' }}
+                            containerStyle={{ height: 40, width: 120, marginRight: 20, marginTop: 10 }}
+                            items={[{ label: 'יום', value: "יום", selected: true },
+                            { label: 'שבוע', value: "שבוע" },
+                            { label: 'חודש', value: "חודש" }]}
+                            onChangeItem={item => setFrequency(item)} />
+                        <CustomText style={{ marginTop: 10 }}> בכל</CustomText>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                        <View style={styles.modalButton}>
+                            <Button color="#6C63FC" title="ביטול" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
+                        </View>
+                        <View style={styles.modalButton}>
+                            <Button color="#6C63FC" title="שמירה" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </Modal>
         </View>
     );
 }
 
 export default ChildView;
-
 const styles = StyleSheet.create({
     ModalInsideView: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "#63a5fc",
-        height: 450,
+        backgroundColor: "white",
+        height: 350,
         width: '80%',
         borderRadius: 30,
         borderWidth: 1,
@@ -92,67 +157,18 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
-    welcome: {
-        fontSize: 25,
-        marginBottom: 20,
-        color: "white"
+    headline: {
+        marginBottom: 50,
+        fontSize: 30,
+        color: "#3A23CD"
     },
     input: {
-        height: 40,
-        width: 180,
-        marginBottom: 20,
-        backgroundColor: '#F5F5F5',
-        borderRadius: 2,
-        padding: 5,
-        textAlign: "center"
-    },
-    inputHeadline: {
-        fontSize: 18,
-        marginBottom: 15,
-        color: "white"
-    },
-    modalButton: {
-        margin: 16,
-        width: 100,
-    },
-    plusButtonView: {
-        margin: 13,
-        marginTop: 25,
-        width: 30,
-        borderRadius: 40
-    },
-    plusButton: {
-        borderRadius: 20
-    },
-    headline: {
-        fontSize: 30,
-        marginTop: 15,
-        color: '#4525F2'
-    },
-    value: {
-        fontSize: 30,
-        marginTop: 15
-    },
-    view: {
-        alignItems: "center",
-        marginTop: 120
-    },
-    money: {
-        alignItems: "center",
-        fontSize: 30,
-        marginTop: 10
-    },
-    moneytype: {
-        alignItems: "center",
-        fontSize: 18,
-        marginRight: 5
-    },
-    imgPresent: {
+        textAlign: "center",
+        borderBottomWidth: 1.0,
         width: 200,
-        height: 178,
-        borderRadius: 100,
-        borderWidth: 1,
-        borderColor: '#4525F2'
+        fontSize: 17,
+        position: 'relative',
+        bottom: 20
     },
     smallHeadline: {
         fontSize: 20,
@@ -169,19 +185,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         fontSize: 15
     },
-    table: {
-        height: 330,
-        marginTop: 60,
-        marginLeft: 40
+    moneyInput: {
+        flexDirection: 'row'
     },
-    text: {
-        fontSize: 17,
-        textAlign: "center"
+    modalButton: {
+        width: 100,
+        marginTop: 30,
+        marginLeft: 16,
+        marginRight: 16
     },
-    imgParents: {
-        width: 230,
-        height: 200,
-        marginBottom: 30,
-        marginTop: 20
-    }
 });
+
+/**
+        height: 178,
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#4525F2' */
