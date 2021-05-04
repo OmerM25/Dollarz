@@ -123,4 +123,8 @@ router.put("/updatemoney/:id", (req, res) => {
   });
 });
 
+router.put("/addAllowance/:id", (req, res) => {
+  console.log(req);
+});
+
 export default router;

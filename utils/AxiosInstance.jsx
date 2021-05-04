@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosConfig = {
-  baseURL: "http://10.0.0.44:3000/",
-  url: "http://10.0.0.44:3000/",
+  baseURL: "http://10.0.0.17:3000/",
+  url: "http://10.0.0.17:3000/",
 };
 
 const AxiosInstance = axios.create(axiosConfig);

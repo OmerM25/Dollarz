@@ -19,7 +19,22 @@ const ChildView = (props) => {
         return <></>;
     }
 
-    return <View  style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    const handleAddAllowance = () => {
+        AxiosInstance.put("child/addAllowance/208512756",
+            { allowance: money, day: selectedDay, frequency: frequency }).
+            then(response => {
+                setShouldOpenMoneyDialog(false);
+                showMessage({
+                    message: "הכסף הוסף בהצלחה",
+                    type: "success",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto"
+                });
+            }).catch(err => console.log(err));
+    }
+
+    return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View>
             <Button onPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }} title="עדכן דמי כיס" />
         </View>
@@ -55,7 +70,7 @@ const ChildView = (props) => {
                             { label: 'חמישי', value: "חמישי" },
                             { label: 'שישי', value: "שישי" },
                             { label: 'שבת', value: "שבת" }]}
-                            onChangeItem={item => setSelectedDay(item)} />
+                            setValue={item => setSelectedDay(item)} />
                         <CustomText>בימי</CustomText>
                     </View>
                     <View style={{ flexDirection: "row", zIndex: 9 }}>
@@ -68,7 +83,7 @@ const ChildView = (props) => {
                             items={[{ label: 'יום', value: "יום", selected: true },
                             { label: 'שבוע', value: "שבוע" },
                             { label: 'חודש', value: "חודש" }]}
-                            onChangeItem={item => setFrequency(item)} />
+                            setValue={item => setFrequency(item)} />
                         <CustomText style={{ marginTop: 10 }}> בכל</CustomText>
                     </View>
                     <View style={{ flexDirection: "row" }}>
@@ -76,7 +91,7 @@ const ChildView = (props) => {
                             <Button color="#6C63FC" title="ביטול" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
                         </View>
                         <View style={styles.modalButton}>
-                            <Button color="#6C63FC" title="שמירה" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
+                            <Button color="#6C63FC" title="שמירה" onPress={handleAddAllowance} />
                         </View>
                     </View>
                 </View>
