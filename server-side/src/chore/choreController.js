@@ -4,6 +4,19 @@ var router = express.Router();
 var Parent = require("../parent/parent")
 var mongoose = require("mongoose");
 
+// Get chore
+
+router.get("/", function (req, res) {
+    let ids = req.query.chores.map(chore => new mongoose.Types.ObjectId(chore));
+    Chore.find({'_id': { $in: ids}}, (err, chores) => {
+        if (err) {
+            return res.status(500).send("Error getting chores");
+        } else {
+            return res.status(200).send(chores);
+        }
+    });
+  });
+
 // Create
 router.post('/', function (req, res) {
     const chore = new Chore({
@@ -11,21 +24,18 @@ router.post('/', function (req, res) {
         amount: req.body.amount,
         isFinished: false
     });
-    
+
     var parentId = mongoose.Types.ObjectId(req.body.parentId);
 
-    chore.save().then((err, chore) => {
-        if (err) { res.send(err) }
-        else {
-            Parent.findByIdAndUpdate(parentId,
-                { $push: { chores: chore._id } },
-                { new: true, useFindAndModify: false },
-                (err, parent) => {
-                    if (err) { res.send(err) }
-                    else { res.send(chore) }
-                }
-            );
-        }
+    chore.save().then(chore => {
+        Parent.findByIdAndUpdate(parentId,
+            { $push: { chores: chore._id } },
+            { new: true, useFindAndModify: false },
+            (err, parent) => {
+                if (err) { res.send(err) }
+                else { res.send(chore) }
+            }
+        );
     });
 });
 
@@ -38,8 +48,9 @@ router.put("/:id", (req, res) => {
 });
 
 // Delete
-router.delete("/:id", (req, res) => {
-    Chore.findByIdAndDelete(req.params.id, (err, result) => {
+router.delete("/", (req, res) => {
+    let id = new mongoose.Types.ObjectId(req.query.id);
+    Chore.findByIdAndDelete(id, (err, result) => {
         if (err) { res.send(err) }
         else { res.send(result) }
     });

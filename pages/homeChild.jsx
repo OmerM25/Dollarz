@@ -1,5 +1,7 @@
-import React from "react";
-import { View, Text, Image, Button } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, Modal, StyleSheet, TextInput } from "react-native";
+import { CustomText } from "../common/CustomText";
+import { Button } from "../common/Button";
 
 // calc that checks how many days more left for getting the allowance
 // The date should be in format YYYY/MM/dd
@@ -33,8 +35,12 @@ const calcDaysLeftToAllowance = (props) => {
 };
 
 const HomeChild = (props) => {
+
   if (!props.child) {
-    return <></>;
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      </View>
+    )
   }
 
   let daysToAllownce = calcDaysLeftToAllowance(props);
@@ -80,4 +86,7 @@ const HomeChild = (props) => {
   );
 };
 
+
+
 export default HomeChild;
+

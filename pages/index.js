@@ -11,3 +11,5 @@ export { default as Quiz } from "./games/quiz";
 export { default as Shopping } from "./games/shopping/shopping";
 export { default as SliderGame } from "./games/slider";
 export { default as RegisterChild } from "./registerChild";
+export { default as HomeParent } from "./homeParent";
+export { default as ChildView } from "./childView";
