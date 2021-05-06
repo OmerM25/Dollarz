@@ -1,43 +1,60 @@
 import React, { useState, useEffect } from "react";
-import { View, ImageBackground, StyleSheet, TouchableOpacity, Image, ScrollView, Text } from "react-native";
+import { View, ImageBackground, StyleSheet, TouchableOpacity, Image, ScrollView, Text, Modal } from "react-native";
 import { CustomText } from "../../../common/CustomText";
-import { CheckBox } from "react-native-elements";
-import { showMessage } from "react-native-flash-message";
 import { Button } from "../../../common/Button";
 import { productsData } from "./shopping-game-data";
-import { ListView } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { DataTable } from "react-native-paper";
 
 const Shopping = ({ navigation: { navigate } }) => {
   const [isGameStarted, setIsGameStarted] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [mixedProducts, setMixedProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [givenMoney, setGivenMoney] = useState(Math.round(1 + Math.random() * (9 - 1)) * 10);
-  let amountOfProductsToWin = 0;
-  let maxMoneyUsagePossible = 0;
+  const [givenMoney, setGivenMoney] = useState(0);
+  const [successFlag, setSuccessFlag] = useState(false);
+  const [amountOfProductsToWin, setAmountOfProductsToWin] = useState(0);
+  const [optimumMoneyUsage, setOptimumMoneyUsage] = useState(0);
+  const [isModalShown, setIsModalShown] = useState(false);
+  const [winningCartExample, setWinningCartExample] = useState([]);
+  const backgroundImage = require("../../../images/shopping_game/background2.png");
+  const winImage = require("../../../assets/images/win.png");
 
   useEffect(() => {
-    shuffleProducts();
+    startNewGame();
   }, []);
 
-  useEffect(() => {
-    amountOfProductsToWin = 0;
-    maxMoneyUsagePossible = 0;
+  const startNewGame = () => {
+    let lastIndex = 0;
+    let amountOfProducts = 0;
+    let MoneyUsage = 0;
+    let winningCombinationExample = [];
+    let money = Math.round(1 + Math.random() * (7 - 1)) * 10;
 
     //sort products by price low to high
-    const productsSortedByPrice = products ? products.sort((a, b) => (a.price > b.price ? 1 : -1)) : [];
+    let productsSortedByPrice = productsData.sort((a, b) => (a.price > b.price ? 1 : -1));
 
     // check the optimum products amount to win
-    productsSortedByPrice.forEach((product) => {
-      if (product.price + maxMoneyUsagePossible <= givenMoney) {
-        maxMoneyUsagePossible += product.price;
-        amountOfProductsToWin++;
+    productsSortedByPrice.forEach((product, index) => {
+      if (product.price + MoneyUsage <= money) {
+        winningCombinationExample.push(product);
+        MoneyUsage += product.price;
+        amountOfProducts = amountOfProducts + 1;
+        lastIndex = index;
       }
     });
-  }, [products]);
 
-  const shuffleProducts = () => {
-    const shuffledProducts = productsData.sort(() => Math.random() - 0.5);
-    setProducts(shuffledProducts);
+    setSelectedProducts([]);
+    setSuccessFlag(false);
+    setGivenMoney(money);
+    setWinningCartExample(winningCombinationExample);
+    setOptimumMoneyUsage(MoneyUsage);
+    setAmountOfProductsToWin(amountOfProducts);
+
+    let randomNumber = Math.round(1 + Math.random() * (6 - 1)) + lastIndex;
+    productsSortedByPrice = productsSortedByPrice.slice(0, randomNumber);
+
+    const shuffledProducts = productsSortedByPrice.sort(() => Math.random() - 0.5);
+    setMixedProducts(shuffledProducts);
   };
 
   const itemPressed = (productName) => {
@@ -47,17 +64,22 @@ const Shopping = ({ navigation: { navigate } }) => {
     // add is not exist otherwise remove item from selected products array
     productIndex === -1 ? newArray.push(productName) : newArray.splice(productIndex, 1);
     setSelectedProducts(newArray);
-    console.log(newArray);
   };
 
   const checkCart = () => {
     // Check if this is the optimum product selection
     if (amountOfProductsToWin == selectedProducts.length) {
-      // let overallCost = selectedProducts.reduce
+      let overallCost = selectedProducts.reduce(
+        (total, productName) => total + mixedProducts.find((prod) => prod.name == productName).price,
+        0
+      );
+      if (overallCost == optimumMoneyUsage) {
+        setSuccessFlag(true);
+      }
     }
-  };
 
-  const backgroundImage = require("../../../images/shopping_game/background2.png");
+    setIsModalShown(true);
+  };
 
   return isGameStarted ? (
     <View style={styles.cont}>
@@ -67,10 +89,7 @@ const Shopping = ({ navigation: { navigate } }) => {
       </View>
       <ScrollView style={styles.scroller}>
         <View style={styles.gameImages}>
-          {products.map((product, index) => {
-            // if (amountOfProductsToWin + 4 >= index) {
-            //   console.log(index);
-
+          {mixedProducts.map((product, index) => {
             return (
               <View key={product.name}>
                 <Text style={{ marginLeft: 70 }}>{product.name}</Text>
@@ -91,6 +110,70 @@ const Shopping = ({ navigation: { navigate } }) => {
         <Button title="בדוק!" color="#6C63FC" onPress={() => checkCart()}></Button>
         <Button title=" יציאה מהמשחק" color="#6C63FC" onPress={() => navigate("Study")}></Button>
       </View>
+      <Modal transparent={true} animationType={"slide"} visible={isModalShown}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          {successFlag ? (
+            <View style={styles.ModalInsideView}>
+              <Image source={winImage} style={{ height: 180, width: "100%" }} />
+              <CustomText style={styles.popupHeadline}>כל הכבוד הצלחת!</CustomText>
+              <View style={styles.modalButton}>
+                <Button
+                  color="#6C63FC"
+                  title="לשלב הבא"
+                  onPress={() => {
+                    setIsModalShown(false);
+                    startNewGame();
+                  }}
+                />
+              </View>
+              <View style={styles.modalButton}>
+                <Button title=" יציאה מהמשחק" color="#6C63FC" onPress={() => navigate("Study")}></Button>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.ModalInsideView}>
+              <CustomText style={styles.popupHeadline}>מצטערים זו </CustomText>
+              <CustomText style={styles.popupHeadline}> תשובה לא נכונה</CustomText>
+              <CustomText style={styles.popupText}> הנה דוגמא לעגלת קניות אפשרית:</CustomText>
+              <View style={{ width: "70%" }}>
+                <DataTable>
+                  <FlatList
+                    data={winningCartExample}
+                    renderItem={({ item }) => {
+                      return (
+                        <DataTable.Row key={item.name} style={{ alignContent: "center" }}>
+                          <DataTable.Cell style={{ flex: 4 }}>
+                            <CustomText>{item.price} ש"ח</CustomText>
+                          </DataTable.Cell>
+                          <DataTable.Cell numeric style={{ flex: 7, alignSelf: "center" }}>
+                            <CustomText>{item.name}</CustomText>
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      );
+                    }}
+                    // key={}
+                    keyExtractor={(historyitem) => historyitem.name}
+                  />
+                </DataTable>
+              </View>
+
+              <View style={styles.modalButton}>
+                <Button
+                  color="#6C63FC"
+                  title="לשלב הבא"
+                  onPress={() => {
+                    setIsModalShown(false);
+                    startNewGame();
+                  }}
+                />
+              </View>
+              <View style={styles.modalButton}>
+                <Button title=" יציאה מהמשחק" color="#6C63FC" onPress={() => navigate("Study")}></Button>
+              </View>
+            </View>
+          )}
+        </View>
+      </Modal>
     </View>
   ) : (
     <ImageBackground source={backgroundImage} style={styles.image}>
@@ -170,5 +253,36 @@ const styles = StyleSheet.create({
   finishButton: {
     marginBottom: 20,
     fontSize: 20,
+  },
+  ModalInsideView: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#eeccff",
+    minHeight: 350,
+    width: "80%",
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "grey",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  popupHeadline: {
+    margin: 10,
+    fontSize: 36,
+    marginBottom: 15,
+  },
+  popupText: {
+    fontSize: 20,
+    marginBottom: 15,
+  },
+  modalButton: {
+    margin: 5,
+    // width: 100,
   },
 });
