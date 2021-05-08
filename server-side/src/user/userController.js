@@ -32,7 +32,7 @@ router.post("/login", function (req, res, next) {
   const userId = req.body.userId;
   const password = req.body.password;
 
-  User.findOne({ idNumber: userId, password: password })
+  User.findOneAndUpdate({ idNumber: userId, password: password }, { $set: { lastLogin: new Date() } })
     .then((currUser) => {
       // Check if parent
       Parent.findOne({ userDetails: currUser._id }, "_id", (err, parentId) => {
