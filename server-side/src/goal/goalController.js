@@ -29,7 +29,7 @@ router.get("/", function (req, res) {
   // get by goal id
 
   router.get("/byChild", function (req, res) {
-    var childId = req.query.childId;
+    var childId = mongoose.Types.ObjectId(req.query.childId);
     Child.findById(childId, (err, child) => {
         if (err || !child) {
             return res.status(500).send("Error getting child");

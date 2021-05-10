@@ -6,6 +6,7 @@ var async = require("async");
 var router = express.Router();
 var Child = require("./child");
 var Parent = require("../parent/parent");
+var MoneyHistory = require("../moneyHistory/moneyHistory");
 const User = require("../user/user");
 
 // Get basic info on a child - name and money
@@ -111,13 +112,21 @@ router.put("/updatemoney/:id", (req, res) => {
     if (err || !user) {
       res.status(500).send("error");
     }
+    
     Child.findOneAndUpdate({ userDetails: user._id }, { $inc: req.body },
       { new: true, useFindAndModify: false }, function (err, result) {
       // Check for erros
       if (err) {
         res.send(err);
       } else {
-        res.send(result);
+        const moneyHistory = new MoneyHistory({
+          child: user._id,
+          amount: result.money,
+          date: new Date()
+        });
+        moneyHistory.save().then(moneyHistory => {
+          res.send(result);
+        })
       }
     });
   });
