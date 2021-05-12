@@ -117,25 +117,34 @@ router.put("/updatemoney/:id", (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          res.send(result);
+          const moneyHistory = new MoneyHistory({
+            child: user._id,
+            amount: result.money,
+            date: new Date()
+          });
+          moneyHistory.save().then(moneyHistory => {
+            res.send(result);
+          })
         }
       });
   });
 });
 
 router.put("/addAllowance/:id", (req, res) => {
-  User.findOne({ idNumber: req.params.id }).then((err, user) => {
+  User.findOne({ idNumber: req.params.id }).then((user, err) => {
     if (err || !user) {
+      console.log(err);
       res.status(500).send("error");
+    } else {
+      Child.findOneAndUpdate({ userDetails: user._id }, { $set: { allowance: req.body.allowance } }).then((err, child) => {
+        // Check for erros
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(res);
+        }
+      })
     }
-    Child.findOneAndUpdate({ userDetails: user._id }, { $set: { allowance: body.allowance } }).then((res, err) => {
-      // Check for erros
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(res);
-      }
-    })
   });
 });
 
