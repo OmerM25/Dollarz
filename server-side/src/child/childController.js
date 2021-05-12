@@ -70,7 +70,7 @@ router.get("/", function (req, res) {
   let ids = req.query.children.map(child => new mongoose.Types.ObjectId(child));
   let children = [];
 
-  async.each(ids, function(currChildId, callback) {
+  async.each(ids, function (currChildId, callback) {
     Parent.findById(sender, (err, parent) => {
       if (err || !parent) {
         return res.status(500).send("no authorization");
@@ -86,7 +86,7 @@ router.get("/", function (req, res) {
               if (err || !user) {
                 res.status(500).send("user doesnt exist");
               } else {
-                children.push({child, user});
+                children.push({ child, user });
                 callback();
               }
             });
@@ -113,18 +113,30 @@ router.put("/updatemoney/:id", (req, res) => {
     }
     Child.findOneAndUpdate({ userDetails: user._id }, { $inc: req.body },
       { new: true, useFindAndModify: false }, function (err, result) {
-      // Check for erros
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(result);
-      }
-    });
+        // Check for erros
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
   });
 });
 
 router.put("/addAllowance/:id", (req, res) => {
-  console.log(req);
+  User.findOne({ idNumber: req.params.id }).then((err, user) => {
+    if (err || !user) {
+      res.status(500).send("error");
+    }
+    Child.findOneAndUpdate({ userDetails: user._id }, { $set: { allowance: body.allowance } }).then((res, err) => {
+      // Check for erros
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(res);
+      }
+    })
+  });
 });
 
 export default router;
