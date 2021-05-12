@@ -26,6 +26,26 @@ router.get("/", function (req, res) {
     });
   });
 
+  // get by goal id
+
+  router.get("/byChild", function (req, res) {
+    var childId = mongoose.Types.ObjectId(req.query.childId);
+    Child.findById(childId, (err, child) => {
+        if (err || !child) {
+            return res.status(500).send("Error getting child");
+        } else {
+            var unachievedGoals = child.goals.filter(goal => !goal.isAchieved);
+            Goal.findById(unachievedGoals[0], (err, goal) => {
+                if (err) {
+                    res.status(500).send("Error getting goal");
+                } else {
+                    return res.status(200).send(goal);
+                }
+            });
+        }
+    });
+  });
+
 // Create a new goal.
 
 router.post("/", (req, res) => {

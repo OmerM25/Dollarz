@@ -15,6 +15,7 @@ const request = require("./src/request/requestController").default;
 const child = require("./src/child/childController").default;
 const parent = require("./src/parent/parentController").default;
 const game = require("./src/game/gameController").default;
+const moneyHistory = require("./src/moneyHistory/moneyHistoryController").default;
 
 app.use(cors());
 
@@ -33,6 +34,7 @@ app.use("/chore", chores);
 app.use("/user", user);
 app.use("/parent", parent);
 app.use("/game", game);
+app.use("/moneyHistory", moneyHistory);
 
 // Launch the server on port 3000
 const server = app.listen(3000, () => {

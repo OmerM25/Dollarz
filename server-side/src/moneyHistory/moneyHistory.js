@@ -1,3 +1,5 @@
+var mongoose = require("mongoose");
+
 var Schema = mongoose.Schema;
 var MoneyHistorySchema = new mongoose.Schema({
     child: {type: Schema.Types.ObjectId, ref: 'Child', required: true},
