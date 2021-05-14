@@ -8,6 +8,50 @@ var Child = require("./child");
 var Parent = require("../parent/parent");
 const User = require("../user/user");
 
+const checkAllowance = (child, user) => {
+  const today = new Date();
+  let shouldUpdateMoney = false;
+  const lastLogin = user.lastLogin || new Date();
+  const allowanceFrequency = child.allowance.frequency;
+  if (allowanceFrequency === 'יום') {
+    today.setDate(today.getDate() - 1);
+    today.setHours(0, 0, 0, 0);
+    if (lastLogin < today) {
+      shouldUpdateMoney = true;
+    }
+  } else if (allowanceFrequency === 'שבוע') {
+    today.setDate(today.getDate() - 7);
+    today.setHours(0, 0, 0, 0);
+    if (lastLogin < today) {
+      shouldUpdateMoney = true;
+    }
+  } else if (allowanceFrequency === 'חודש') {
+    today.setDate(today.getDate() - 30);
+    today.setHours(0, 0, 0, 0);
+    if (lastLogin < today) {
+      shouldUpdateMoney = true;
+    }
+  }
+
+  if (shouldUpdateMoney) {
+    Child.findOneAndUpdate({ userDetails: user._id }, { $inc: child.allowance.money },
+      { new: true, useFindAndModify: false }, function (err, result) {
+        // Check for erros
+        if (err) {
+          res.send(err);
+        } else {
+          const moneyHistory = new MoneyHistory({
+            child: user._id,
+            amount: result.money,
+            date: new Date()
+          });
+          moneyHistory.save().then(moneyHistory => {
+            res.send(result);
+          })
+        }
+      });
+  }
+}
 // Get basic info on a child - name and money
 router.post("/", function (req, res) {
   // Get sender token
@@ -22,10 +66,11 @@ router.post("/", function (req, res) {
       if (err || !child) {
         res.status(500).send("child doesnt exist");
       } else {
-        User.findById(child.userDetails, "name", (err, user) => {
+        User.findById(child.userDetails, (err, user) => {
           if (err || !user) {
             res.status(500).send("user doesnt exist");
           } else {
+            checkAllowance(child, user);
             res.status(200).send({ child, user });
           }
         });

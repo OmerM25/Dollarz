@@ -48,7 +48,7 @@ const ChildView = (props) => {
     const handleAddAllowance = () => {
         console.log(child);
         AxiosInstance.put("child/addAllowance/" + child.user.idNumber,
-            { allowance: money, day: selectedDay, frequency: frequency }).
+            { allowance: { money: money, day: selectedDay, frequency: frequency } }).
             then(response => {
                 setShouldOpenMoneyDialog(false);
                 showMessage({
