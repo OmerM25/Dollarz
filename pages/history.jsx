@@ -26,6 +26,7 @@ const History = ({navigation: { navigate }}) => {
   const [childName, setChildName] = useState("");
   const [requestId, setRequestId] = useState("");
   const [history, setHistory] = useState("");
+  const [selectedTab, setSelectedTab] = useState(0);
   const getLatestRequest = () => {
     AxiosInstance.get('request').then((resp) => {
       setReason(resp.data.reason);
@@ -38,7 +39,17 @@ const History = ({navigation: { navigate }}) => {
     })
   }
 
+  const getRequestHistorybystatus = (index) => {
+    AxiosInstance.get('request/allbyparentstatus/' +index).then((resp) => {
+      setHistory(resp.data);
+      setSelectedTab(index);
+    }).catch((err) => {
+      
+    })
+  }
+
   const getRequestHistory = () => {
+   
     AxiosInstance.get('request/allbyparent').then((resp) => {
       setHistory(resp.data);
     }).catch((err) => {
@@ -121,7 +132,7 @@ const History = ({navigation: { navigate }}) => {
     getRequestChildName();
     getRequestHistory();
   },[show]);
-  const [selectedTab, setSelectedTab] = useState(3);
+  
   return (<View>{show? (
     <View style={styles.view}>
       <CustomText style={styles.headline}>
@@ -160,9 +171,9 @@ const History = ({navigation: { navigate }}) => {
          </View>
 <SafeAreaView style={styles.container}>
   <MaterialTabs
-    items={['בהמתנה', 'נדחו', 'אושרו', 'הכל']}
+    items={['הכל','אושרו','נדחו']}
     selectedIndex={selectedTab}
-    onChange={setSelectedTab}
+    onChange={getRequestHistorybystatus}
     barColor="#a89af5"
     indicatorColor="#4525F2"
     activeTextColor="black"

@@ -14,8 +14,18 @@ const imgDontApprove = require("../images/smalldontapprove.png");
 const imgHistory = require("../images/history.png");
 
 const childHistory = ({navigation: { navigate }}) => {
-    const [selectedTab, setSelectedTab] = useState(3);
+    const [selectedTab, setSelectedTab] = useState(0);
     const [history, setHistory] = useState("");
+
+    const getRequestHistorybystatus = (index) => {
+      AxiosInstance.get('request/allbychildstatus/' +index).then((resp) => {
+        setHistory(resp.data);
+        setSelectedTab(index);
+      }).catch((err) => {
+        
+      })
+    }
+
     const getRequestHistory = () => {
       AxiosInstance.get('request/allbychild').then((resp) => {
         setHistory(resp.data);
@@ -23,6 +33,7 @@ const childHistory = ({navigation: { navigate }}) => {
         
       })
     }
+   
     useEffect(() => {
       getRequestHistory();
     });
@@ -33,15 +44,15 @@ const childHistory = ({navigation: { navigate }}) => {
              היסטורית הבקשות שלי</CustomText>
              </View>
     <SafeAreaView style={styles.container}>
-      <MaterialTabs
-        items={['בהמתנה', 'נדחו', 'אושרו', 'הכל']}
-        selectedIndex={selectedTab}
-        onChange={setSelectedTab}
-        barColor="#a89af5"
-        indicatorColor="#4525F2"
-        activeTextColor="black"
-        textStyle={{fontSize: 16,fontFamily: 'VarelaRound'}}
-      />
+    <MaterialTabs
+    items={['הכל','אושרו','נדחו']}
+    selectedIndex={selectedTab}
+    onChange={getRequestHistorybystatus}
+    barColor="#a89af5"
+    indicatorColor="#4525F2"
+    activeTextColor="black"
+    textStyle={{fontSize: 16,fontFamily: 'VarelaRound'}}
+  />
     </SafeAreaView>
     <ScrollView style={styles.table}>
     <DataTable>
