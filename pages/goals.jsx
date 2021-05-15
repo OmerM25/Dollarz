@@ -14,6 +14,7 @@ const Goal = () => {
   const [amount, setAmount] = useState("");
   const [remainingAmount, setRemainingAmount] = useState("");
   const [childMoney, setChildMoney] = useState("");
+  const [daysLeft, setDaysLeft] = useState("");
   const getLatestGoal = () => {
     AxiosInstance.get('goals').then((resp) => {
       setDescription(resp.data.description);
@@ -27,6 +28,18 @@ const Goal = () => {
         setRemainingAmount((amount > childMoney && childMoney > 0) ? amount - childMoney : amount);
       });
     });
+  }
+  const getGoalPrediction = () => {
+    AxiosInstance.post('goals/predict').then((res) => {
+      if (res.data.daysLeft > 0) {
+        setDaysLeft("בקצב הזה, עוד בערך  " + res.data.daysLeft + " ימים נגיע למטרה!")
+      } else {
+        setDaysLeft("נראה שכרגע אנחנו מפסידים כסף במקום להרוויח.. אולי ננסה לעשות מטלות בבית?")
+      }
+    }).catch((err) => {
+      setDaysLeft("אנו מתקשים לחזות כמה ימים ייקח להגיע למטרה.. שווה לנסות להרוויח קצת כסף ולבדוק מאוחר יותר")
+      console.log(err)
+    })
   }
   const saveNewGoal = () => {
     AxiosInstance.post('goals', {
@@ -59,6 +72,7 @@ const Goal = () => {
   useEffect(() => {
     getLatestGoal();
     getChildMoney();
+    getGoalPrediction();
   }, []);
 
   return (
@@ -96,6 +110,9 @@ const Goal = () => {
         </CustomText>
       <CustomText style={styles.text}>
         ככה גם תעזור בבית וגם תצבור עוד כסף
+        </CustomText>
+      <CustomText style={styles.smallHeadline}>
+        {daysLeft.toString()}
         </CustomText>
 
       <View style={{ flexDirection: "row" }}>
