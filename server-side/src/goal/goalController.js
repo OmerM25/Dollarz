@@ -4,6 +4,9 @@ var jwt = require("jsonwebtoken");
 var router = express.Router();
 var Goal = require("./goal")
 var Child = require("../child/child")
+var MoneyHistory = require("../moneyHistory/moneyHistory")
+
+import regression from 'regression'
 
 // Get active goal
 
@@ -87,5 +90,110 @@ router.delete("/:id", (req, res) => {
         else { res.send(result) }
     })
 })
+
+router.post("/predict", (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    var childId = mongoose.Types.ObjectId(jwt.decode(token)._id);
+    Child.findById(childId, (err, child) => {
+        if (err) {
+            return res.status(500).send("Error getting child");
+        } else {
+            var unachievedGoals = child.goals.filter(goal => !goal.isAchieved);
+            Goal.findById(unachievedGoals[0], (err, goal) => {
+                if (err) {
+                    res.status(500).send("Error getting goal");
+                } else {
+                    MoneyHistory.find({ child: childId}).sort({date: "ascending"}).exec((err, historyList) => {
+                        if (err) {
+                            res.status(500).send("Error getting child's money history")
+                        } else if (historyList.length == 0) {
+                            res.status(500).send("Child has no money history")
+                        } else {
+                            // Data preparation
+                            var summedByDay = sumAmountByDay(historyList);
+                            var preparedData = createSortedDaysArray(summedByDay);
+                            
+                            // Data prediction
+                            var regressionEquation = regression.linear(preparedData);
+                            var predictedDay = regressionEquation.predict(goal.amount)
+
+                            // Calculate how many days left until the goal is reached
+                            var todayDateDiff = Math.floor((new Date() - historyList[0].date) / (1000*60*60*24))
+                            var daysLeft = Math.round(predictedDay[1] - todayDateDiff)
+
+                            res.status(200).send({'daysLeft': daysLeft});
+                        }
+                    })
+                }
+            });
+        }
+    });
+})
+
+function createSortedDaysArray(moneyHistory) {
+    var finalList = []
+    moneyHistory.push({'date': new Date(), 'amount': moneyHistory[moneyHistory.length - 1].amount})
+
+    for (var i = 0; i < moneyHistory.length - 1; i++) {
+        // var dateDiff = Math.floor((moneyHistory[i + 1].date - moneyHistory[i].date))
+        var currDate = new Date(moneyHistory[i].date)
+        var nextDate = new Date(moneyHistory[i + 1].date)
+
+        while (currDate < nextDate) {
+            finalList.push([moneyHistory[i].amount, finalList.length])
+            currDate.setDate(currDate.getDate() + 1)
+        }
+    }
+
+    return finalList
+}
+
+// function createSortedDaysArray(moneyHistory) {
+//     var finalList = []
+//     // moneyHistory.push({'date': new Date(), 'amount': moneyHistory[moneyHistory.length - 1].amount})
+//     finalList.push([moneyHistory[0].amount, 0])
+
+//     for (var i = 0; i < moneyHistory.length - 1; i++) {
+//         var dateDiff = Math.floor((moneyHistory[i + 1].date - moneyHistory[i].date) / (1000*60*60*24))
+//         finalList.push([moneyHistory[i+1].amount, finalList[finalList.length - 1][1] + dateDiff])
+//         // var currDate = new Date(moneyHistory[i].date)
+//         // var nextDate = new Date(moneyHistory[i + 1].date)
+
+//         // while (currDate < nextDate) {
+//         //     finalList.push([moneyHistory[i].amount, finalList.length])
+//         //     currDate.setDate(currDate.getDate() + 1)
+//         // }
+//     }
+
+//     return finalList
+// }
+
+function sumAmountByDay(moneyHistory) {
+    var summedList = []
+
+    var currAmount = 0
+    var isLast = false
+    for (var i = 0; i < moneyHistory.length - 1; i++) {
+        var currDate = new Date(moneyHistory[i].date.toDateString())
+        var nextDate = new Date(moneyHistory[i + 1].date.toDateString())
+        
+        currAmount += moneyHistory[i].amount
+        isLast = (i + 1 == moneyHistory.length - 1)
+
+        if (currDate.valueOf() != nextDate.valueOf())  {
+            summedList.push({'date': currDate, 'amount': currAmount})
+            currAmount = 0
+
+            if (isLast) {
+                summedList.push({'date': nextDate, 'amount': moneyHistory[i + 1].amount})
+            }
+        } else if (isLast) {
+            currAmount += moneyHistory[i + 1].amount
+            summedList.push({'date': currDate, 'amount': currAmount})
+        }
+    }
+
+    return summedList
+}
 
 export default router;
