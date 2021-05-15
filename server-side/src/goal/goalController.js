@@ -130,12 +130,14 @@ router.post("/predict", (req, res) => {
     });
 })
 
+//
+// This function represents the data in every single day, even if there were no changes.
+//
 function createSortedDaysArray(moneyHistory) {
     var finalList = []
     moneyHistory.push({'date': new Date(), 'amount': moneyHistory[moneyHistory.length - 1].amount})
 
     for (var i = 0; i < moneyHistory.length - 1; i++) {
-        // var dateDiff = Math.floor((moneyHistory[i + 1].date - moneyHistory[i].date))
         var currDate = new Date(moneyHistory[i].date)
         var nextDate = new Date(moneyHistory[i + 1].date)
 
@@ -148,6 +150,9 @@ function createSortedDaysArray(moneyHistory) {
     return finalList
 }
 
+//
+// This function represents only the dates with changes and the amount of money in those days.
+//
 // function createSortedDaysArray(moneyHistory) {
 //     var finalList = []
 //     // moneyHistory.push({'date': new Date(), 'amount': moneyHistory[moneyHistory.length - 1].amount})
