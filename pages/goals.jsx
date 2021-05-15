@@ -32,7 +32,7 @@ const Goal = () => {
   const getGoalPrediction = () => {
     AxiosInstance.post('goals/predict').then((res) => {
       if (res.data.daysLeft > 0) {
-        setDaysLeft("בקצב הזה, עוד בערך  " + res.data.daysLeft + " ימים נגיע למטרה!")
+        setDaysLeft("בקצב הזה, עוד בערך " + res.data.daysLeft + " ימים נגיע למטרה!")
       } else {
         setDaysLeft("נראה שכרגע אנחנו מפסידים כסף במקום להרוויח.. אולי ננסה לעשות מטלות בבית?")
       }
