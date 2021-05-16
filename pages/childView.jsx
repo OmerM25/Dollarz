@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { Image, Modal, StyleSheet, TextInput, View } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
@@ -7,14 +7,15 @@ import AxiosInstance from "../utils/AxiosInstance";
 const imgGoal = require("../assets/images/goal.png");
 import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-const imageParents = require("../assets/images/parents.png");
+import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts';
 
 const ChildView = (props) => {
     const [money, setMoney] = useState();
     const [selectedDay, setSelectedDay] = useState("ראשון");
     const [frequency, setFrequency] = useState("יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
+    const [graphData, setGraphData] = useState();
+    const [graph, setGraph] = useState();
 
     if (!props.route.params.parent) {
         return <></>;
@@ -41,9 +42,39 @@ const ChildView = (props) => {
                 childId: child.user._id
             }
         }).then((resp) => {
-            console.log(resp.data);
+            setGraphData(resp.data.map(item => item.amount));
+            console.log(graphData);
+            setGraph(<View style={{ height: 200, padding: 20, flexDirection: 'row' }}>
+                <YAxis
+                    data={graphData}
+                    style={{ marginBottom: xAxisHeight }}
+                    contentInset={verticalContentInset}
+                    svg={axesSvg}
+                />
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                    <LineChart
+                        style={{ flex: 1 }}
+                        data={graphData}
+                        contentInset={verticalContentInset}
+                        svg={{ stroke: 'rgb(134, 65, 244)' }}
+                    >
+                        <Grid />
+                    </LineChart>
+                    <XAxis
+                        style={{ marginHorizontal: -10, height: xAxisHeight }}
+                        data={graphData}
+                        formatLabel={(value, index) => index}
+                        contentInset={{ left: 10, right: 10 }}
+                        svg={axesSvg}
+                    />
+                </View>
+            </View>);
         })
     }
+
+    const axesSvg = { fontSize: 10, fill: 'grey' };
+    const verticalContentInset = { top: 10, bottom: 10 }
+    const xAxisHeight = 30
 
 
     useEffect(() => {
@@ -84,6 +115,7 @@ const ChildView = (props) => {
             <CustomText style={styles.smallHeadline}>
                 גרף התקדמות
             </CustomText>
+            {graph}
             <Modal
                 transparent={true}
                 animationType={"slide"}
