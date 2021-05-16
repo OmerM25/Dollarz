@@ -36,7 +36,7 @@ const childHistory = ({navigation: { navigate }}) => {
    
     useEffect(() => {
       getRequestHistory();
-    });
+    },[]);
   return (
     <View>
         <View style={styles.view}>
