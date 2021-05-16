@@ -21,6 +21,7 @@ const NavContainer = () => {
         <Stack.Screen name="Register" component={Pages.Register} />
         <Stack.Screen name="AskMoney" component={Pages.AskMoney} />
         <Stack.Screen name="Quiz" component={Pages.Quiz} />
+        <Stack.Screen name="History" component={Pages.History} />
         <Stack.Screen name="SliderGame" component={Pages.SliderGame} />
         <Stack.Screen name="RegisterChild" component={Pages.RegisterChild} />
         <Stack.Screen name="ChildView" component={Pages.ChildView} />

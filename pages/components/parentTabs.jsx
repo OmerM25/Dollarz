@@ -39,7 +39,7 @@ export default function parentTabs(props) {
       />
       <Tab.Screen
         name="History"
-        component={Pages.History}
+        children={() => <Pages.History navigation={props.navigation} parent={parent} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="history" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",
