@@ -2,8 +2,8 @@ import axios from "axios";
 
 // When using phone
 const axiosConfig = {
-  baseURL: "http://10.0.0.13:3000/",
-  url: "http://10.0.0.13:3000/",
+  baseURL: "http://10.100.102.218:3000/",
+  url: "http://10.100.102.218:3000/",
 };
 
 // When using PC (postman, web, etc)

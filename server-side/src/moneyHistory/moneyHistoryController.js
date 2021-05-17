@@ -28,16 +28,23 @@ const getLastHistory = async (childId, startDate, endDate) => {
 const func = async (childId) => {
     var historyByMonth = [];
     var currMonth = new Date().getMonth();
+    var startMonth = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     for (var i = 0; i < 12; i++) {
         year = new Date().getFullYear();
-        if (i > currMonth) {
+        if (startMonth == 12) {
+            startMonth = 0;
+        }
+        if (startMonth > currMonth) {
             year--;
         }
-        var startDate = new Date(year, i, 1, 0, 0, 0, 0);
-        var endDate = new Date(year, i + 1, 1, 0, 0, 0, 0);
+        console.log(startMonth + "," + year);
+        var startDate = new Date(year, startMonth, 1, 0, 0, 0, 0);
+        var endDate = new Date(year, startMonth + 1, 1, 0, 0, 0, 0);
         var amount = await getLastHistory(childId, startDate, endDate);
-        historyByMonth.push({ date: new Date(year, i, 2), amount: amount });
+        console.log(amount);
+        historyByMonth.push({ date: startMonth, amount: amount });
+        startMonth++;
     }
 
     return historyByMonth;

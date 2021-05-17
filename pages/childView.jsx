@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { Image, Modal, StyleSheet, TextInput, View } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
@@ -7,8 +7,8 @@ import AxiosInstance from "../utils/AxiosInstance";
 const imgGoal = require("../assets/images/goal.png");
 import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts';
 
-const imageParents = require("../assets/images/parents.png");
 
 const ChildView = (props) => {
     let child = props.route.params.child;
@@ -16,6 +16,8 @@ const ChildView = (props) => {
     const [selectedDay, setSelectedDay] = useState(child.child.allowance.day || "ראשון");
     const [frequency, setFrequency] = useState(child.child.allowance.frequency || "יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
+    const [graphData, setGraphData] = useState([]);
+    const [graph, setGraph] = useState();
 
     if (!props.route.params.parent) {
         return <></>;
@@ -42,9 +44,39 @@ const ChildView = (props) => {
                 childId: child.user._id
             }
         }).then((resp) => {
-            console.log(resp.data);
+            let wgraphData = resp.data.map(item => item.amount);
+            let xGraphData = resp.data;
+            setGraph(<View style={{ height: 200, padding: 20, flexDirection: 'row' }}>
+                <YAxis
+                    data={wgraphData}
+                    style={{ marginBottom: xAxisHeight }}
+                    contentInset={verticalContentInset}
+                    svg={axesSvg}
+                />
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                    <LineChart
+                        style={{ flex: 1 }}
+                        data={wgraphData}
+                        contentInset={verticalContentInset}
+                        svg={{ stroke: 'rgb(134, 65, 244)' }}
+                    >
+                        <Grid />
+                    </LineChart>
+                    <XAxis
+                        style={{ marginHorizontal: -10, height: xAxisHeight }}
+                        data={xGraphData}
+                        formatLabel={(value, index) => { return xGraphData[index].date + 1 }}
+                        contentInset={{ left: 10, right: 10 }}
+                        svg={axesSvg}
+                    />
+                </View>
+            </View>);
         })
     }
+
+    const axesSvg = { fontSize: 10, fill: 'grey' };
+    const verticalContentInset = { top: 10, bottom: 10 }
+    const xAxisHeight = 30
 
     const handleAddAllowance = () => {
         console.log(child);
@@ -86,14 +118,14 @@ const ChildView = (props) => {
             </CustomText>
             <CustomText style={styles.value}>
                 <CustomText style={styles.moneytype}>
-                    {goalAmount ? goalAmount + 'ש"ח' : null}
+                    {goalAmount ? goalAmount + ' ש"ח' : null}
                 </CustomText>
             </CustomText>
             <CustomText style={styles.smallHeadline}>
                 דמי כיס
             </CustomText>
             <CustomText>
-                {child.child.allowance.amount ? child.child.allowance.amount + 'ש"ח' : "אין"}
+                {child.child.allowance.money ? child.child.allowance.money + 'ש"ח כל ' + child.child.allowance.frequency + ' ביום ' + child.child.allowance.day : "אין"}
             </CustomText>
             <View style={styles.modalButton}>
                 <Button onPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }} title="עדכן דמי כיס" />
@@ -101,6 +133,7 @@ const ChildView = (props) => {
             <CustomText style={styles.smallHeadline}>
                 גרף התקדמות
             </CustomText>
+            {graph}
             <Modal
                 transparent={true}
                 animationType={"slide"}
