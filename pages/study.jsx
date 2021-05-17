@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: 3
   },
   img: {
-    width: 190,
+    width: 175,
     height: 150,
     marginTop: 40,
     marginLeft: 7,

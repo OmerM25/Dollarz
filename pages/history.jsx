@@ -17,7 +17,12 @@ const imgsmallApprove = require("../images/smallapprove.png");
 const imgsmallDontApprove = require("../images/smalldontapprove.png");
 const imgHistory = require("../images/history.png");
 
-const History = ({navigation: { navigate }}) => {
+const History = (props) => {
+  if (!props.parent) {
+    return <></>;
+}
+
+const [children, setChildren] = useState("");
   const [visibility, setVisibility] = useState(false);
   const [show, setShow] = useState(false);
   const [reason, setReason] = useState("");
@@ -26,6 +31,23 @@ const History = ({navigation: { navigate }}) => {
   const [childName, setChildName] = useState("");
   const [requestId, setRequestId] = useState("");
   const [history, setHistory] = useState("");
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedChildTab, setSelectedChildTab] = useState(0);
+ 
+
+  const getChildren = () => {
+    props.parent.children.forEach(child => {
+        AxiosInstance.get('child', {
+            params: {
+                children: props.parent.children
+            }
+        }).then(resp => {
+            setChildren(Object.values(resp.data));
+        });
+    });
+}
+
+
   const getLatestRequest = () => {
     AxiosInstance.get('request').then((resp) => {
       setReason(resp.data.reason);
@@ -38,7 +60,17 @@ const History = ({navigation: { navigate }}) => {
     })
   }
 
+  const getRequestHistorybystatus = (index) => {
+    AxiosInstance.get('request/allbyparentstatus/' +index).then((resp) => {
+      setHistory(resp.data);
+      setSelectedTab(index);
+    }).catch((err) => {
+      
+    })
+  }
+
   const getRequestHistory = () => {
+   
     AxiosInstance.get('request/allbyparent').then((resp) => {
       setHistory(resp.data);
     }).catch((err) => {
@@ -117,11 +149,12 @@ const History = ({navigation: { navigate }}) => {
   }
 
   useEffect(() => {
+    getChildren();
     getLatestRequest();
     getRequestChildName();
     getRequestHistory();
   },[show]);
-  const [selectedTab, setSelectedTab] = useState(3);
+  
   return (<View>{show? (
     <View style={styles.view}>
       <CustomText style={styles.headline}>
@@ -160,15 +193,28 @@ const History = ({navigation: { navigate }}) => {
          </View>
 <SafeAreaView style={styles.container}>
   <MaterialTabs
-    items={['בהמתנה', 'נדחו', 'אושרו', 'הכל']}
+    items={['הכל','אושרו','נדחו']}
     selectedIndex={selectedTab}
-    onChange={setSelectedTab}
+    onChange={getRequestHistorybystatus}
     barColor="#a89af5"
     indicatorColor="#4525F2"
     activeTextColor="black"
     textStyle={{fontSize: 16,fontFamily: 'VarelaRound'}}
   />
 </SafeAreaView>
+<View style={ styles.secondfilter}>
+<SafeAreaView style={styles.container}>
+  <MaterialTabs
+  items={children!=""? children.map((item, key)=>((item.user.name))):[' '] }
+    selectedIndex={selectedChildTab}
+    onChange={getChildren}
+    barColor="#6C63FF"
+    indicatorColor="#4525F2"
+    activeTextColor="black"
+    textStyle={{fontSize: 16,fontFamily: 'VarelaRound'}}
+  />
+</SafeAreaView>
+</View>
 <ScrollView style={styles.table}>
 <DataTable>
 
@@ -241,6 +287,9 @@ const styles = StyleSheet.create({
     height: 178,
     marginTop: 180,
   },
+  secondfilter: {
+    marginTop: 25,
+  },
   historyheadline: {
     fontSize: 30,
        marginTop: 80,
@@ -255,7 +304,7 @@ const styles = StyleSheet.create({
        flex: 1,
      },
      table: {
-         height:330,
+         height:300,
        marginTop: 60,
        marginLeft: 40
      },
