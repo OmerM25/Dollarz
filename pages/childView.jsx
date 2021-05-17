@@ -9,12 +9,13 @@ import axios from 'axios';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts';
 
+
 const ChildView = (props) => {
     const [money, setMoney] = useState();
     const [selectedDay, setSelectedDay] = useState("ראשון");
     const [frequency, setFrequency] = useState("יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
-    const [graphData, setGraphData] = useState();
+    const [graphData, setGraphData] = useState([]);
     const [graph, setGraph] = useState();
 
     if (!props.route.params.parent) {
@@ -42,11 +43,11 @@ const ChildView = (props) => {
                 childId: child.user._id
             }
         }).then((resp) => {
-            setGraphData(resp.data.map(item => item.amount));
-            console.log(graphData);
+            let wgraphData = resp.data.map(item => item.amount);
+            let xGraphData = resp.data;
             setGraph(<View style={{ height: 200, padding: 20, flexDirection: 'row' }}>
                 <YAxis
-                    data={graphData}
+                    data={wgraphData}
                     style={{ marginBottom: xAxisHeight }}
                     contentInset={verticalContentInset}
                     svg={axesSvg}
@@ -54,7 +55,7 @@ const ChildView = (props) => {
                 <View style={{ flex: 1, marginLeft: 10 }}>
                     <LineChart
                         style={{ flex: 1 }}
-                        data={graphData}
+                        data={wgraphData}
                         contentInset={verticalContentInset}
                         svg={{ stroke: 'rgb(134, 65, 244)' }}
                     >
@@ -62,8 +63,8 @@ const ChildView = (props) => {
                     </LineChart>
                     <XAxis
                         style={{ marginHorizontal: -10, height: xAxisHeight }}
-                        data={graphData}
-                        formatLabel={(value, index) => index}
+                        data={xGraphData}
+                        formatLabel={(value, index) => { return xGraphData[index].date + 1 }}
                         contentInset={{ left: 10, right: 10 }}
                         svg={axesSvg}
                     />
