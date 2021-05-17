@@ -11,15 +11,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const imageParents = require("../assets/images/parents.png");
 
 const ChildView = (props) => {
-    const [money, setMoney] = useState();
-    const [selectedDay, setSelectedDay] = useState("ראשון");
-    const [frequency, setFrequency] = useState("יום");
+    let child = props.route.params.child;
+    const [money, setMoney] = useState(child.child.allowance.money || "");
+    const [selectedDay, setSelectedDay] = useState(child.child.allowance.day || "ראשון");
+    const [frequency, setFrequency] = useState(child.child.allowance.frequency || "יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
 
     if (!props.route.params.parent) {
         return <></>;
     }
-    let child = props.route.params.child;
+    
 
     const [goalDescription, setGoalDescription] = useState("");
     const [goalAmount, setGoalAmount] = useState("");
@@ -43,6 +44,22 @@ const ChildView = (props) => {
         }).then((resp) => {
             console.log(resp.data);
         })
+    }
+
+    const handleAddAllowance = () => {
+        console.log(child);
+        AxiosInstance.put("child/addAllowance/" + child.user.idNumber,
+            { allowance: { money: money, day: selectedDay, frequency: frequency } }).
+            then(response => {
+                setShouldOpenMoneyDialog(false);
+                showMessage({
+                    message: "הכסף הוסף בהצלחה",
+                    type: "success",
+                    textAlign: "right",
+                    duration: 3000,
+                    icon: "auto"
+                });
+            }).catch(err => console.log(err));
     }
 
 
@@ -92,7 +109,7 @@ const ChildView = (props) => {
                 onBackdropPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.ModalInsideView}>
-                        <CustomText style={styles.modalHeadline}>סכום דמי הכיס</CustomText>
+                        <CustomText style={styles.headline}>סכום דמי הכיס</CustomText>
                         <View styles={styles.moneyInput}>
                             <TextInput
                                 keyboardType="numeric"
@@ -116,7 +133,7 @@ const ChildView = (props) => {
                                 { label: 'חמישי', value: "חמישי" },
                                 { label: 'שישי', value: "שישי" },
                                 { label: 'שבת', value: "שבת" }]}
-                                onChangeItem={item => setSelectedDay(item)} />
+                                setValue={item => setSelectedDay(item)} />
                             <CustomText>בימי</CustomText>
                         </View>
                         <View style={{ flexDirection: "row", zIndex: 9 }}>
@@ -129,7 +146,7 @@ const ChildView = (props) => {
                                 items={[{ label: 'יום', value: "יום", selected: true },
                                 { label: 'שבוע', value: "שבוע" },
                                 { label: 'חודש', value: "חודש" }]}
-                                onChangeItem={item => setFrequency(item)} />
+                                setValue={item => setFrequency(item)} />
                             <CustomText style={{ marginTop: 10 }}> בכל</CustomText>
                         </View>
                         <View style={{ flexDirection: "row" }}>
@@ -137,7 +154,7 @@ const ChildView = (props) => {
                                 <Button color="#6C63FC" title="ביטול" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
                             </View>
                             <View style={styles.modalButton}>
-                                <Button color="#6C63FC" title="שמירה" onPress={() => setShouldOpenMoneyDialog(!shouldOpenMoneyDialog)} />
+                                <Button color="#6C63FC" title="שמירה" onPress={handleAddAllowance} />
                             </View>
                         </View>
                     </View>
