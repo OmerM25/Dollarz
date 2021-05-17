@@ -51,6 +51,10 @@ const checkAllowance = (child, user) => {
         }
       });
   }
+
+  User.findOneAndUpdate({ idNumber: user.idNumber}, { $set: { lastLogin: new Date() } }).then(res=>{
+    return
+  });
 }
 // Get basic info on a child - name and money
 router.post("/", function (req, res) {

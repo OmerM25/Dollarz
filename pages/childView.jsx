@@ -11,15 +11,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const imageParents = require("../assets/images/parents.png");
 
 const ChildView = (props) => {
-    const [money, setMoney] = useState();
-    const [selectedDay, setSelectedDay] = useState("ראשון");
-    const [frequency, setFrequency] = useState("יום");
+    let child = props.route.params.child;
+    const [money, setMoney] = useState(child.child.allowance.money || "");
+    const [selectedDay, setSelectedDay] = useState(child.child.allowance.day || "ראשון");
+    const [frequency, setFrequency] = useState(child.child.allowance.frequency || "יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
 
     if (!props.route.params.parent) {
         return <></>;
     }
-    let child = props.route.params.child;
+    
 
     const [goalDescription, setGoalDescription] = useState("");
     const [goalAmount, setGoalAmount] = useState("");
