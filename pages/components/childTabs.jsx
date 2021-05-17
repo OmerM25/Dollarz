@@ -8,9 +8,11 @@ const Tab = createBottomTabNavigator();
 
 export default function childTabs(props) {
   const [child, setChild] = useState("");
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     AxiosInstance.get("/user/_id").then((res) => {
+      setUser(res.data);
       AxiosInstance.post("/child", { childId: res.data.toString() }).then((res) => {
         setChild(res.data);
       });
