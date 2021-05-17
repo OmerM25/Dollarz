@@ -77,7 +77,7 @@ const ChildView = (props) => {
     const axesSvg = { fontSize: 10, fill: 'grey' };
     const verticalContentInset = { top: 10, bottom: 10 }
     const xAxisHeight = 30
-    
+
     const handleAddAllowance = () => {
         console.log(child);
         AxiosInstance.put("child/addAllowance/" + child.user.idNumber,
@@ -118,14 +118,14 @@ const ChildView = (props) => {
             </CustomText>
             <CustomText style={styles.value}>
                 <CustomText style={styles.moneytype}>
-                    {goalAmount ? goalAmount + 'ש"ח' : null}
+                    {goalAmount ? goalAmount + ' ש"ח' : null}
                 </CustomText>
             </CustomText>
             <CustomText style={styles.smallHeadline}>
                 דמי כיס
             </CustomText>
             <CustomText>
-                {child.child.allowance.amount ? child.child.allowance.amount + 'ש"ח' : "אין"}
+                {child.child.allowance.money ? child.child.allowance.money + 'ש"ח כל ' + child.child.allowance.frequency + ' ביום ' + child.child.allowance.day : "אין"}
             </CustomText>
             <View style={styles.modalButton}>
                 <Button onPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }} title="עדכן דמי כיס" />
