@@ -7,6 +7,7 @@ var router = express.Router();
 var Child = require("./child");
 var Parent = require("../parent/parent");
 const User = require("../user/user");
+const MoneyHistory = require("../moneyHistory/moneyHistory");
 
 const checkAllowance = (child, user) => {
   const today = new Date();
