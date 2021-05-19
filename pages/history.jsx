@@ -161,7 +161,6 @@ const [children, setChildren] = useState("");
       <CustomText style={styles.headline}>
         {childName} מבקש לקבל
         </CustomText>
-        <Button  onPress={()=>{approveRequest()}} title="GGGGG"></Button>
         <CustomText style={styles.money}>
           {amount}
           <CustomText style={styles.moneytype}>

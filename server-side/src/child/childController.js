@@ -75,7 +75,7 @@ router.post("/", function (req, res) {
           if (err || !user) {
             res.status(500).send("user doesnt exist");
           } else {
-            // checkAllowance(child, user);
+            checkAllowance(child, user);
             res.status(200).send({ child, user });
           }
         });
