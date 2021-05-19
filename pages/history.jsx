@@ -8,6 +8,7 @@ import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import Moment from 'moment';
 import axios from 'axios';
+import { Button } from 'react-native';
 
 
 const imgApprove = require("../images/approve.png");
@@ -90,7 +91,7 @@ const [children, setChildren] = useState("");
   const approveRequest = () => {
     var reqId = {requestId}.requestId;
     var childTzId= {childTz}.childTz;
-    var moneyChange = Math.abs({amount}.amount)*-1;
+    var moneyChange = Math.abs({amount}.amount);
     axios.all([
    AxiosInstance.put('request/approve/'+ reqId, {status: '1'}),
    AxiosInstance.put('child/updatemoney/'+ childTzId, {money: moneyChange})
@@ -160,6 +161,7 @@ const [children, setChildren] = useState("");
       <CustomText style={styles.headline}>
         {childName} מבקש לקבל
         </CustomText>
+        <Button  onPress={()=>{approveRequest()}} title="GGGGG"></Button>
         <CustomText style={styles.money}>
           {amount}
           <CustomText style={styles.moneytype}>

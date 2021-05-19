@@ -7,6 +7,7 @@ var router = express.Router();
 var Child = require("./child");
 var Parent = require("../parent/parent");
 const User = require("../user/user");
+const MoneyHistory = require("../moneyHistory/moneyHistory");
 
 const checkAllowance = (child, user) => {
   const today = new Date();
@@ -74,7 +75,7 @@ router.post("/", function (req, res) {
           if (err || !user) {
             res.status(500).send("user doesnt exist");
           } else {
-            checkAllowance(child, user);
+            // checkAllowance(child, user);
             res.status(200).send({ child, user });
           }
         });
