@@ -55,7 +55,7 @@ const SliderGame = ({ navigation: { navigate } }) => {
 
             setAnswerRevealed(true);
         } else {
-            if (tries >= 0) {
+            if (tries > 0) {
                 setTries(tries - 1)
                 let message = "אוי כמעט... בוא ננסה שוב, נשארו לך " + tries + " נסיונות";
                 showMessage({

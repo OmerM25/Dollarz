@@ -32,9 +32,9 @@ const Study = ({navigation: { navigate }, ...props}) => {
           <TouchableOpacity onPress={navigateQuiz}>
             <Image source={require('../assets/images/Quiz.jpg')} style={styles.img} />
           </TouchableOpacity>
-          <Image source={require('../assets/images/Memory.jpg')} style={styles.img} />
+          {/* <Image source={require('../assets/images/Memory.jpg')} style={styles.img} /> */}
           <Image source={require('../assets/images/Shopping.jpg')} style={styles.img} />
-          <Image source={require('../assets/images/Videos.jpg')} style={styles.img} />
+          {/* <Image source={require('../assets/images/Videos.jpg')} style={styles.img} /> */}
         </View>
       </ScrollView>
     </View>
