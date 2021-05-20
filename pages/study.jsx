@@ -25,16 +25,16 @@ const Study = ({navigation: { navigate }, ...props}) => {
       <CustomText style={styles.textStyle}> אז למה אתה מחכה? בוא נתחיל לשחק </CustomText>
       <ScrollView >
         <View style={styles.images}>
-          <Image source={require('../assets/images/Read.jpg')} style={styles.img} />
+          {/* <Image source={require('../assets/images/Read.jpg')} style={styles.img} /> */}
           <TouchableOpacity onPress={navigateSliderGame}>
             <Image source={require('../assets/images/GuessThePrice.jpg')} style={styles.img} />
           </TouchableOpacity>
           <TouchableOpacity onPress={navigateQuiz}>
             <Image source={require('../assets/images/Quiz.jpg')} style={styles.img} />
           </TouchableOpacity>
-          <Image source={require('../assets/images/Memory.jpg')} style={styles.img} />
+          {/* <Image source={require('../assets/images/Memory.jpg')} style={styles.img} /> */}
           <Image source={require('../assets/images/Shopping.jpg')} style={styles.img} />
-          <Image source={require('../assets/images/Videos.jpg')} style={styles.img} />
+          {/* <Image source={require('../assets/images/Videos.jpg')} style={styles.img} /> */}
         </View>
       </ScrollView>
     </View>
