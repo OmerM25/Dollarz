@@ -8,14 +8,31 @@ var mongoose = require("mongoose");
 
 router.get("/", function (req, res) {
     let ids = req.query.chores.map(chore => new mongoose.Types.ObjectId(chore));
-    Chore.find({'_id': { $in: ids}}, (err, chores) => {
+    Chore.find({ '_id': { $in: ids }, 'isFinished': false }, (err, chores) => {
         if (err) {
             return res.status(500).send("Error getting chores");
         } else {
             return res.status(200).send(chores);
         }
     });
-  });
+});
+
+router.get("/byParent", function (req, res) {
+    Parent.findById(req.query.parentId, (err, parent) => {
+        if (err || !parent) {
+            return res.status(500).send("Error getting parent");
+        } else {
+            let ids = parent.chores.map(chore => new mongoose.Types.ObjectId(chore));
+            Chore.find({ '_id': { $in: ids }, 'isFinished': false }, (err, chores) => {
+                if (err) {
+                    return res.status(500).send("Error getting chores");
+                } else {
+                    return res.status(200).send(chores);
+                }
+            });
+        }
+    });
+});
 
 // Create
 router.post('/', function (req, res) {

@@ -121,7 +121,7 @@ const RegisterChild = ({ navigation: { navigate } }) => {
       <View style={styles.footer}>
         <Text style={{ fontSize: 35, textAlign: "center" }}> הוספת ילד </Text>
         {/* <Text style={{ fontSize: 15, color: "#4525F2", marginTop: 10, marginBottom: 10, textAlign: "center" }}>
-          שימו לב- מלאו את הפרטים של אחד ההורים, שניכם תוכלו להחבר יחד לאותו החשבון
+          שימו לב- מלאו את הפרטים של אחד ההורים, שניכם תוכלו להתחבר יחד לאותו החשבון
         </Text> */}
         <View style={styles.form}>
           <TextInput
