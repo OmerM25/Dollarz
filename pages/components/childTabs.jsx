@@ -23,7 +23,7 @@ export default function childTabs(props) {
     <Tab.Navigator initialRouteName="HomeChild">
       <Tab.Screen
         name="Goals"
-        component={Pages.Goals}
+        children={() => <Pages.Goals navigation={props.navigation} child={child} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="bullseye" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",
@@ -32,7 +32,7 @@ export default function childTabs(props) {
       />
       <Tab.Screen
         name="Chores"
-        component={Pages.Chores}
+        children={() => <Pages.Chores navigation={props.navigation} child={child} />}
         options={{
           tabBarIcon: ({ tintColor }) => <Icon name="list-ol" size={25} color={tintColor} />,
           activeTintColor: "#6C63FC",

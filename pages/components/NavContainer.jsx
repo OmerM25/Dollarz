@@ -25,6 +25,7 @@ const NavContainer = () => {
         <Stack.Screen name="SliderGame" component={Pages.SliderGame} />
         <Stack.Screen name="RegisterChild" component={Pages.RegisterChild} />
         <Stack.Screen name="ChildView" component={Pages.ChildView} />
+        <Stack.Screen name="Chores" component={Pages.Chores} />
       </Stack.Navigator>
     </NavigationContainer>
   );

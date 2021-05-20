@@ -8,7 +8,7 @@ import AxiosInstance from "../utils/AxiosInstance";
 const imgPresent = require("../images/present.png");
 
 
-const Goal = () => {
+const Goal = (props) => {
   const [visibility, setVisibility] = useState(false);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -118,7 +118,7 @@ const Goal = () => {
       <View style={{ flexDirection: "row" }}>
         <View style={styles.modalButton}>
           <Button onPress={() => {
-            props.navigation.navigate("AskMoney");
+            props.navigation.navigate("Chores", { child: props.child });
           }} title="לרשימת המטלות" />
         </View>
 

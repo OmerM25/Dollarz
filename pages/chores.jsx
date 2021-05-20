@@ -1,12 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Image, Modal, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { Image, Modal, StyleSheet, TextInput, View, FlatList, TouchableOpacity } from "react-native";
 import { showMessage } from "react-native-flash-message";
 import { CustomText } from "../common/CustomText";
 import { Button } from "../common/Button";
 import AxiosInstance from "../utils/AxiosInstance";
 
+const imgSmiley = require("../assets/images/smiley.png");
+
 const Chores = (props) => {
-  if (!props.parent && !props.child) {
+  let child;
+
+  if (props.route) {
+    child = props.route.params.child;
+  } else {
+    child = props.child;
+  }
+
+  if (!props.parent && !child) {
     return <></>;
   }
 
@@ -15,7 +25,7 @@ const Chores = (props) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
 
-  const getChores = () => {
+  const getParentChores = () => {
     AxiosInstance.get('chore', {
       params: {
         chores: props.parent.chores
@@ -25,7 +35,17 @@ const Chores = (props) => {
     });
   }
 
-  const updateChores = () => {
+  const getChildChores = () => {
+    AxiosInstance.get('chore/byParent', {
+      params: {
+        parentId: child.child.parent
+      }
+    }).then(resp => {
+      setChores(resp.data);
+    });
+  }
+
+  const updateParentChores = () => {
     AxiosInstance.get("/user/_id").then((res) => {
       AxiosInstance.post("/parent", { parentId: res.data.toString() }).then((res) => {
         AxiosInstance.get('chore', {
@@ -37,6 +57,30 @@ const Chores = (props) => {
         });
       });
     });
+  }
+
+  const addChore = () => {
+    if (props.parent) {
+      return <View style={{ flexDirection: "row" }}>
+        <View style={styles.modalButton}>
+          <Button onPress={() => { setVisibility(!visibility) }} title="הוספת מטלה חדשה" />
+        </View>
+      </View>;
+    }
+  }
+
+  const explainText = () => {
+    if (child) {
+      return <View style={{ justifyContent: "center", alignItems: "center" }}><View style={{ flexDirection: "row" }}>
+        <CustomText style={styles.smallHeadline}>עשית מטלה? כל הכבוד!</CustomText>
+      </View>
+        <View style={{ flexDirection: "row" }}>
+          <CustomText style={styles.smallHeadline}>עכשיו נשאר רק ללחוץ על הסמיילי,</CustomText>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <CustomText style={styles.smallHeadline}>והבקשה לכסף תישלח להורים</CustomText>
+        </View></View>;
+    }
   }
 
   const saveNewChore = () => {
@@ -55,7 +99,7 @@ const Chores = (props) => {
       });
       setDescription("");
       setAmount("");
-      updateChores();
+      updateParentChores();
     }).catch((err) => {
       setVisibility(!visibility);
       showMessage({
@@ -82,7 +126,7 @@ const Chores = (props) => {
         duration: 3000,
         icon: "auto"
       });
-      updateChores();
+      updateParentChores();
     }).catch((err) => {
       showMessage({
         message: "לא הצלחנו למחוק את המטלה",
@@ -95,10 +139,36 @@ const Chores = (props) => {
     });
   }
 
+  const markDone = (choreId) => {
+    AxiosInstance.put('chore/' + choreId, { isFinished: true }).then(() => {
+      showMessage({
+        message: "המטלה בוצעה בהצלחה!",
+        type: "success",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto"
+      });
+      getChildChores();
+    }).catch(() => {
+      showMessage({
+        message: "לא הצלחנו למחוק את המטלה",
+        description: "קרתה תקלה.. אולי ננסה שוב מאוחר יותר?",
+        type: "danger",
+        textAlign: "right",
+        duration: 3000,
+        icon: "auto",
+      });
+    })
+  }
+
   let isRendered = useRef(false);
   useEffect(() => {
     isRendered = true;
-    getChores();
+    if (props.parent) {
+      getParentChores();
+    } else if (child) {
+      getChildChores();
+    }
     return () => {
       isRendered = false;
     };
@@ -112,32 +182,50 @@ const Chores = (props) => {
       <FlatList
         data={chores}
         renderItem={({ item }) => {
-          return <View style={{ flexDirection: "row" }}>
-            <View style={{ margin: 15 }}>
-              <Button onPress={() => deleteChore(item._id)} title="X" color="#FF0000" />
-            </View>
-            <View style={{ margin: 15 }}>
-              <CustomText style={styles.money}>
-                {item.amount}
-                <CustomText style={styles.moneytype}>
-                  ש"ח
+          if (props.parent) {
+            return <View style={{ flexDirection: "row" }}>
+              <View style={{ margin: 15 }}>
+                <Button onPress={() => deleteChore(item._id)} title="X" color="#FF0000" />
+              </View>
+              <View style={{ margin: 15 }}>
+                <CustomText style={styles.money}>
+                  {item.amount}
+                  <CustomText style={styles.moneytype}>
+                    ש"ח
       </CustomText>
-              </CustomText>
+                </CustomText>
+              </View>
+              <View style={{ margin: 15 }}>
+                <CustomText style={styles.smallHeadline}>
+                  {item.description}
+                </CustomText>
+              </View>
             </View>
-            <View style={{ margin: 15 }}>
-              <CustomText style={styles.smallHeadline}>
-                {item.description}
-              </CustomText>
+          } else if (child) {
+            return <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity style={styles.button} onPress={() => { markDone(item._id) }}>
+                <Image source={imgSmiley} style={styles.smileyImg}/>
+              </TouchableOpacity>
+              <View style={{ margin: 15 }}>
+                <CustomText style={styles.money}>
+                  {item.amount}
+                  <CustomText style={styles.moneytype}>
+                    ש"ח
+      </CustomText>
+                </CustomText>
+              </View>
+              <View style={{ margin: 15 }}>
+                <CustomText style={styles.smallHeadline}>
+                  {item.description}
+                </CustomText>
+              </View>
             </View>
-          </View>
+          }
         }}
         keyExtractor={chore => chore._id}
       />
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.modalButton}>
-          <Button onPress={() => { setVisibility(!visibility) }} title="הוספת מטלה חדשה" />
-        </View>
-      </View>
+      {addChore()}
+      {explainText()}
       <View style={styles.header}>
         <Image style={{ width: 200, height: 200 }} source={require("../assets/images/chores.png")} />
       </View>
@@ -264,5 +352,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     textAlign: "center"
+  },
+  smileyImg: {
+    height: 35,
+    width: 35,
+    marginTop: 20
   }
 });
