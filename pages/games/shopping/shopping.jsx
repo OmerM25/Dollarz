@@ -28,7 +28,7 @@ const Shopping = ({ navigation: { navigate } }) => {
     let amountOfProducts = 0;
     let MoneyUsage = 0;
     let winningCombinationExample = [];
-    let money = Math.round(1 + Math.random() * (7 - 1)) * 10;
+    let money = Math.round(1 + Math.random() * (8 - 1)) * 10;
 
     //sort products by price low to high
     let productsSortedByPrice = productsData.sort((a, b) => (a.price > b.price ? 1 : -1));
@@ -73,7 +73,7 @@ const Shopping = ({ navigation: { navigate } }) => {
         (total, productName) => total + mixedProducts.find((prod) => prod.name == productName).price,
         0
       );
-      if (overallCost == optimumMoneyUsage) {
+      if (overallCost <= givenMoney) {
         setSuccessFlag(true);
       }
     }

@@ -1,5 +1,45 @@
 export const productsData = [
   {
+    name: "טונה",
+    pic: require("../../../images/shopping_game/tuna.png"),
+    price: 6,
+  },
+  {
+    name: "פסטה",
+    pic: require("../../../images/shopping_game/pasta.png"),
+    price: 7,
+  },
+  {
+    name: "אורז",
+    pic: require("../../../images/shopping_game/rice.png"),
+    price: 10,
+  },
+  {
+    name: "משחת שיניים",
+    pic: require("../../../images/shopping_game/colgate.png"),
+    price: 10,
+  },
+  {
+    name: "קליק",
+    pic: require("../../../images/shopping_game/klik.png"),
+    price: 5,
+  },
+  {
+    name: "קפה נמס עלית",
+    pic: require("../../../images/shopping_game/coffee.png"),
+    price: 17,
+  },
+  {
+    name: "גבינה צהובה 400 גרם",
+    pic: require("../../../images/shopping_game/cheese.png"),
+    price: 24,
+  },
+  {
+    name: "קורנפלקס",
+    pic: require("../../../images/shopping_game/cereals.png"),
+    price: 22,
+  },
+  {
     name: "במבה (קטנה)",
     pic: require("../../../images/slider_game/bamba.jpg"),
     price: 4,
