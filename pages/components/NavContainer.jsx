@@ -22,9 +22,11 @@ const NavContainer = () => {
         <Stack.Screen name="AskMoney" component={Pages.AskMoney} />
         <Stack.Screen name="Quiz" component={Pages.Quiz} />
         <Stack.Screen name="Shopping" component={Pages.Shopping} />
+        <Stack.Screen name="History" component={Pages.History} />
         <Stack.Screen name="SliderGame" component={Pages.SliderGame} />
         <Stack.Screen name="RegisterChild" component={Pages.RegisterChild} />
         <Stack.Screen name="ChildView" component={Pages.ChildView} />
+        <Stack.Screen name="Chores" component={Pages.Chores} />
       </Stack.Navigator>
     </NavigationContainer>
   );

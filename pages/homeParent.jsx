@@ -151,7 +151,7 @@ const HomeParent = (props) => {
                         </View>
                         <View style={{ margin: 15 }}>
                             <Text style={styles.smallHeadline} onPress={() => {
-                            props.navigation.navigate("ChildView", {child: item.user._id, parent: props.parent});
+                            props.navigation.navigate("ChildView", {child: item, parent: props.parent});
                         }}>
                                 {item.user.name}
                             </Text>

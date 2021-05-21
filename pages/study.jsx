@@ -25,7 +25,7 @@ const Study = ({ navigation: { navigate }, ...props }) => {
       <CustomText style={styles.textStyle}> אז למה אתה מחכה? בוא נתחיל לשחק </CustomText>
       <ScrollView>
         <View style={styles.images}>
-          <Image source={require("../assets/images/Read.jpg")} style={styles.img} />
+          {/* <Image source={require('../assets/images/Read.jpg')} style={styles.img} /> */}
           <TouchableOpacity onPress={navigateSliderGame}>
             <Image source={require("../assets/images/GuessThePrice.jpg")} style={styles.img} />
           </TouchableOpacity>
@@ -36,7 +36,8 @@ const Study = ({ navigation: { navigate }, ...props }) => {
           <TouchableOpacity onPress={() => navigate("Shopping")}>
             <Image source={require("../assets/images/Shopping.jpg")} style={styles.img} />
           </TouchableOpacity>
-          <Image source={require("../assets/images/Videos.jpg")} style={styles.img} />
+          {/* <Image source={require('../assets/images/Memory.jpg')} style={styles.img} /> */}
+          {/* <Image source={require('../assets/images/Videos.jpg')} style={styles.img} /> */}
         </View>
       </ScrollView>
     </View>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   img: {
-    width: 190,
+    width: 175,
     height: 150,
     marginTop: 40,
     marginLeft: 7,

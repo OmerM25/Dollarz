@@ -75,14 +75,26 @@ router.get("/", function (req, res) {
 
 
 // get all the requests of a parent
-router.get("/allbyparent", function (req, res) {
+router.get("/allbyparentstatus/:status", function (req, res) { 
   const token = req.headers.authorization.split(" ")[1];
 
   // Get sender _id
   const parentId = jwt.decode(token)._id;
   const parentTz = jwt.decode(token).id;
-
-  Request.find({ parentId: parentTz}, (err, request) => {
+  const status=req.params.status;
+  if (status!='1' && status != '2')
+  {
+    Request.find({ parentId: parentTz}, (err, request) => {
+      if (err) {
+        res.status(500).send("no requests");
+      } else {
+        console.log("requests - ", request);
+        res.status(200).send(request);
+      }
+    });
+  }
+else{
+  Request.find({ parentId: parentTz, status: status}, (err, request) => {
     if (err) {
       res.status(500).send("no requests");
     } else {
@@ -90,7 +102,25 @@ router.get("/allbyparent", function (req, res) {
       res.status(200).send(request);
     }
   });
+}
 });
+
+router.get("/allbyparent", function (req, res) {
+   const token = req.headers.authorization.split(" ")[1];
+ 
+   // Get sender _id
+   const parentId = jwt.decode(token)._id;
+   const parentTz = jwt.decode(token).id;
+ 
+   Request.find({ parentId: parentTz}, (err, request) => {
+     if (err) {
+       res.status(500).send("no requests");
+     } else {
+       console.log("requests - ", request);
+       res.status(200).send(request);
+     }
+   });
+ });
 
 
 // get all the requests of a child
@@ -109,6 +139,38 @@ router.get("/allbychild", function (req, res) {
       res.status(200).send(request);
     }
   });
+});
+
+
+router.get("/allbychildstatus/:status", function (req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Get sender _id
+  const childId = jwt.decode(token)._id;
+  const childTz = jwt.decode(token).id;
+  const status=req.params.status;
+  if (status!='1' && status != '2')
+  {
+  Request.find({ childId: childTz}, (err, request) => {
+    if (err) {
+      res.status(500).send("no requests");
+    } else {
+      console.log("requests - ", request);
+      res.status(200).send(request);
+    }
+  });
+}
+else {
+  Request.find({ childId: childTz, status: status}, (err, request) => {
+    if (err) {
+      res.status(500).send("no requests");
+    } else {
+      console.log("requests - ", request);
+      res.status(200).send(request);
+    }
+  });
+
+}
 });
 
 
