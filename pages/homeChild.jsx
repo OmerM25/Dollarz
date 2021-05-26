@@ -33,9 +33,9 @@ const HomeChild = (props) => {
     )
   }
 
-  let daysToAllownce = calcDaysLeftToAllowance(props);
-  let isThereActiveAllowance =
-    props.child.child.allowance.amount !== "0" && props.child.child.allowance.amount !== undefined;
+  // let daysToAllownce = calcDaysLeftToAllowance(props);
+  // let isThereActiveAllowance =
+    // props.child.child.allowance.amount !== "0" && props.child.child.allowance.amount !== undefined;
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
