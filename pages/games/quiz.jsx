@@ -30,7 +30,7 @@ const Quiz = ({ navigation: { navigate } }) => {
                 duration: 3000,
                 icon: "auto"
             });
-            
+
             navigate("Study");
         } else {
             setCurrQuestion(currQuestion + 1)
@@ -55,7 +55,7 @@ const Quiz = ({ navigation: { navigate } }) => {
 
     const mappedAnswers = questions[currQuestion]?.answers.map((answer, index) => {
         return (
-            <CheckBox style={{textAlign: "center", width: "100%"}}
+            <CheckBox style={{ textAlign: "center", width: "100%" }}
                 center
                 key={index}
                 title={answer}
@@ -69,14 +69,14 @@ const Quiz = ({ navigation: { navigate } }) => {
     });
 
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center" }} center>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", alignContent: "center", alignText: "center" }} center>
             <FlashMessage />
-            <CustomText style={{margin: 30, fontSize: 30, fontWeight: "bold"}}>משחק טריוויה</CustomText>
-            <CustomText style={{margin: 5, fontSize: 20, fontWeight: "bold"}}>{questions[currQuestion]?.question}</CustomText>
-            <View style={{marginTop: 80, justifyContent: "center", alignItems: "center", width: "100%"}} center>
+            <CustomText style={{ margin: 30, fontSize: 30, fontWeight: "bold" }}>משחק טריוויה</CustomText>
+            <CustomText style={{ margin: 5, fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{questions[currQuestion]?.question}</CustomText>
+            <View style={{ marginTop: 80, justifyContent: "center", alignItems: "center", minWidth: 800, maxWidth: 800 }} center>
                 {mappedAnswers}
             </View>
-            { correctAnswer && <Button title="שאלה הבאה" color="#6C63FC" onPress={() => nextQuestion() }></Button> }
+            { correctAnswer && <Button title="שאלה הבאה" color="#6C63FC" onPress={() => nextQuestion()}></Button>}
         </View>
     );
 };
