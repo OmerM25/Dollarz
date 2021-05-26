@@ -36,7 +36,7 @@ const checkAllowance = (child, user) => {
 
   if (shouldUpdateMoney) {
     Child.findOneAndUpdate({ userDetails: user._id }, { $inc: child.allowance.money },
-      { new: true, useFindAndModify: false }, function (err, result) {
+      { new: true, useFindAndModify: false }, function (err, res) {
         // Check for erros
         if (err) {
           res.send(err);

@@ -13,21 +13,23 @@ const Goal = (props) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [remainingAmount, setRemainingAmount] = useState("");
-  const [childMoney, setChildMoney] = useState("");
+  const [childMoney, setChildMoney] = useState();
   const [daysLeft, setDaysLeft] = useState("");
   const getLatestGoal = () => {
     AxiosInstance.get('goals').then((resp) => {
       setDescription(resp.data.description);
       setAmount(resp.data.amount);
+      getChildMoney(resp.data.amount);
     })
   }
-  const getChildMoney = () => {
+  const getChildMoney = (currAmount) => {
     AxiosInstance.get("/user/_id").then((res) => {
       AxiosInstance.post("/child", { childId: res.data.toString() }).then((resp) => {
         setChildMoney(resp.data.child.money);
-        setRemainingAmount((amount > childMoney && childMoney > 0) ? amount - childMoney : amount);
-      });
-    });
+        let currChildMoney = resp.data.child.money;
+        setRemainingAmount((currAmount > currChildMoney && currChildMoney > 0) ? currAmount - currChildMoney : currAmount);
+      }).catch((err) =>  console.log(err));
+    }).catch((err) => console.log(err));
   }
   const getGoalPrediction = () => {
     AxiosInstance.post('goals/predict').then((res) => {
@@ -71,7 +73,6 @@ const Goal = (props) => {
 
   useEffect(() => {
     getLatestGoal();
-    getChildMoney();
     getGoalPrediction();
   }, []);
 
@@ -94,7 +95,7 @@ const Goal = (props) => {
         נשאר לך לחסוך:
         </CustomText>
       <CustomText style={styles.value}>
-        {remainingAmount.toString()}
+        {remainingAmount ? remainingAmount.toString() : remainingAmount}
         <CustomText style={styles.moneytype}>
           ש"ח
         </CustomText>
