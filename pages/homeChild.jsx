@@ -8,33 +8,46 @@ import { Button } from "../common/Button";
 // The frequency should be in days
 const calcDaysLeftToAllowance = (props) => {
   let currentDate = new Date();
-  var beginDate = new Date(props.child.child.allowance.beginDate);
-  var endDate = new Date(props.child.child.allowance.endDate);
+  var weekday = currentDate.toLocaleString("default", { weekday: "long" });
+
+  // var beginDate = new Date(props.child.child.allowance.beginDate);
+  // var endDate = new Date(props.child.child.allowance.endDate);
 
   // If there isn't allowance or the end date has passed
   if (
-    beginDate == "" ||
-    currentDate > endDate ||
-    props.child.child.allowance.amount == "0" ||
-    props.child.child.allowance.amount == undefined
+    // beginDate == "" ||
+    // currentDate > endDate ||
+    props.child.child.allowance.money == "0" ||
+    props.child.child.allowance.money == undefined
   ) {
     return null;
   }
 
-  if (currentDate > beginDate) {
-    // Get date diff in days
-    var dateDiff = Math.floor((currentDate - beginDate) / (1000 * 60 * 60 * 24));
+  // if (currentDate > beginDate) {
+  //   // Get date diff in days
+  //   var dateDiff = Math.floor((currentDate - beginDate) / (1000 * 60 * 60 * 24));
 
-    return props.child.child.allowance.frequency - (dateDiff % props.child.child.allowance.frequency);
-  }
+  //   return props.child.child.allowance.frequency - (dateDiff % props.child.child.allowance.frequency);
+  // }
 
-  if (beginDate > currentDate) {
-    // Get date diff in days
-    return Math.floor((beginDate - currentDate) / (1000 * 60 * 60 * 24)) + 1;
-  }
+  // if (beginDate > currentDate) {
+  //   // Get date diff in days
+  //   return Math.floor((beginDate - currentDate) / (1000 * 60 * 60 * 24)) + 1;
+  // }
 };
 
 const HomeChild = (props) => {
+  // set frequency
+  // let frequency = 0;
+
+  // if (props.child.child.allowance.frequency == "יום") {
+  //   frequency = 1;
+  // } else if (props.child.child.allowance.frequency == "שבוע") {
+  //   frequency = 7;
+  // } else if (props.child.child.allowance.frequency == "חודש") {
+  //   frequency = 30;
+  // }
+
   if (!props.child) {
     return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}></View>;
   }
@@ -51,11 +64,22 @@ const HomeChild = (props) => {
         <CustomText style={{ fontSize: 80 }}> {props.child.child.money} </CustomText>
       </View>
       <CustomText style={{ fontSize: 32, marginTop: 20 }}> כל הכבוד! </CustomText>
-      {daysToAllownce !== null ? (
-        daysToAllownce == props.child.child.allowance.frequency ? (
+      {props.child.child.allowance.money === "0" ? (
+        <></>
+      ) : (
+        <>
+          <CustomText style={{ fontSize: 18, marginTop: 15 }}>
+            דמי הכיס שלך מגיעים ביום {props.child.child.allowance.day} כל {props.child.child.allowance.frequency}
+          </CustomText>
+          <CustomText style={{ fontSize: 18 }}> ותקבל עוד {props.child.child.allowance.money} ש"ח. </CustomText>
+        </>
+      )}
+
+      {/* {daysToAllownce !== null ? (
+        daysToAllownce == frequency ? (
           <>
             <CustomText style={{ fontSize: 18, marginTop: 15 }}> דמי הכיס שלך מגיעים היום. איזה כיף! </CustomText>
-            <CustomText style={{ fontSize: 18 }}> קיבלת עוד {props.child.child.allowance.amount} ש"ח. </CustomText>
+            <CustomText style={{ fontSize: 18 }}> קיבלת עוד {props.child.child.allowance.money} ש"ח. </CustomText>
           </>
         ) : (
           <>
@@ -65,13 +89,13 @@ const HomeChild = (props) => {
             </CustomText>
             <CustomText style={{ fontSize: 18 }}>
               {" "}
-              ואז תקבל עוד {props.child.child.allowance.amount} ש"ח. איזה כיף!{" "}
+              ואז תקבל עוד {props.child.child.allowance.money} ש"ח. איזה כיף!{" "}
             </CustomText>
           </>
         )
       ) : (
         <></>
-      )}
+      )} */}
 
       <Image
         style={{ width: 300, height: 250, marginTop: 15, marginBottom: 40 }}
