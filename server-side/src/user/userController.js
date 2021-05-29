@@ -60,7 +60,7 @@ router.post("/registerParent", function (req, res, next) {
     name: req.body.name,
     password: req.body.password,
     lastLogin: new Date(),
-  });
+  }); //
 
   user
     .save()
