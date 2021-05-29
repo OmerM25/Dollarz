@@ -38,12 +38,11 @@ const func = async (childId) => {
         if (startMonth > currMonth) {
             year--;
         }
-        console.log(startMonth + "," + year);
+        
         var startDate = new Date(year, startMonth, 1, 0, 0, 0, 0);
         var endDate = new Date(year, startMonth + 1, 1, 0, 0, 0, 0);
         var amount = await getLastHistory(childId, startDate, endDate);
-        console.log(amount);
-        historyByMonth.push({ date: startMonth, amount: amount });
+        historyByMonth.push({ date: startMonth, amount: amount ? amount : 0 });
         startMonth++;
     }
 

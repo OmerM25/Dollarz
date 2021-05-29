@@ -12,9 +12,9 @@ import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts';
 
 const ChildView = (props) => {
     let child = props.route.params.child;
-    const [money, setMoney] = useState(child.child.allowance.money || "");
-    const [selectedDay, setSelectedDay] = useState(child.child.allowance.day || "ראשון");
-    const [frequency, setFrequency] = useState(child.child.allowance.frequency || "יום");
+    const [money, setMoney] = useState(child.child.allowance ? child.child.allowance.money : "");
+    const [selectedDay, setSelectedDay] = useState(child.child.allowance ? child.child.allowance.day : "ראשון");
+    const [frequency, setFrequency] = useState(child.child.allowance ? child.child.allowance.frequency : "יום");
     const [shouldOpenMoneyDialog, setShouldOpenMoneyDialog] = useState(false);
     const [graphData, setGraphData] = useState([]);
     const [graph, setGraph] = useState();
@@ -125,7 +125,7 @@ const ChildView = (props) => {
                 דמי כיס
             </CustomText>
             <CustomText>
-                {child.child.allowance.money ? child.child.allowance.money + 'ש"ח כל ' + child.child.allowance.frequency + ' ביום ' + child.child.allowance.day : "אין"}
+                {child.child.allowance ? child.child.allowance.money + 'ש"ח כל ' + child.child.allowance.frequency + ' ביום ' + child.child.allowance.day : "אין"}
             </CustomText>
             <View style={styles.modalButton}>
                 <Button onPress={() => { setShouldOpenMoneyDialog(!shouldOpenMoneyDialog) }} title="עדכן דמי כיס" />
