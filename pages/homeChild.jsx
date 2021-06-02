@@ -56,7 +56,7 @@ const HomeChild = (props) => {
   let isThereActiveAllowance;
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop:40 }}>
       <CustomText style={{ fontSize: 45 }}> היי {props.child.user.name} ! </CustomText>
       <CustomText style={{ fontSize: 35 }}> עד עכשיו חסכת </CustomText>
       <View style={{ marginTop: 20, flexDirection: "row" }}>
