@@ -73,7 +73,7 @@ const Quiz = ({ navigation: { navigate } }) => {
             <FlashMessage />
             <CustomText style={{ margin: 30, fontSize: 30, fontWeight: "bold" }}>משחק טריוויה</CustomText>
             <CustomText style={{ margin: 5, fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{questions[currQuestion]?.question}</CustomText>
-            <View style={{ marginTop: 80, justifyContent: "center", alignItems: "center", minWidth: 800, maxWidth: 800 }} center>
+            <View style={{ marginTop: 80, justifyContent: "center", alignItems: "center", minWidth: 350, maxWidth: 350 }} center>
                 {mappedAnswers}
             </View>
             { correctAnswer && <Button title="שאלה הבאה" color="#6C63FC" onPress={() => nextQuestion()}></Button>}

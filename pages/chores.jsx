@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   },
   headline: {
     fontSize: 30,
-    marginTop: 15,
+    marginTop: 80,
     color: '#4525F2'
   },
   value: {
