@@ -119,6 +119,7 @@ const History = (props) => {
       })
   }
 
+
   const rejectRequest = () => {
     var reqId = { requestId }.requestId;
 
@@ -219,7 +220,7 @@ const History = (props) => {
 
 
           <FlatList
-            data={history}
+         data={history && history.sort((a, b) => a.dateRequested.localeCompare(b.dateRequested)).reverse()}
             renderItem={({ item }) => {
               return <DataTable.Row>
                 <DataTable.Cell style={{ flex: 2 }}><CustomText style={styles.date}>{item.amount}</CustomText></DataTable.Cell>
