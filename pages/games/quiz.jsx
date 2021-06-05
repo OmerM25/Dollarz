@@ -8,7 +8,6 @@ import AxiosInstance from "../../utils/AxiosInstance";
 
 
 const Quiz = ({ navigation: { navigate } }) => {
-    const [checked, setChecked] = useState(false);
     const [questions, setQuestions] = useState("");
     const [currQuestion, setCurrQuestion] = useState(0)
     const [correctAnswer, setCorrectAnswers] = useState(false)
@@ -48,9 +47,8 @@ const Quiz = ({ navigation: { navigate } }) => {
         setSelectedId(index);
         if (index === questions[currQuestion]?.correct - 1) {
             setCorrectAnswers(true);
-        } else {
-            setPrevSelected([...prevSelected, index])
         }
+        setPrevSelected([...prevSelected, index]);
     }
 
     const mappedAnswers = questions[currQuestion]?.answers.map((answer, index) => {
